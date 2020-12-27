@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
 <head>
 	<meta charset="utf-8">
 	<base href="../../../" />
@@ -9,34 +9,35 @@
 <body>
 	<h1>[name]</h1>
 
-	<h2>Overview</h2>
+	<h2>概要</h2>
 	<div>
 		<p>
-			Three.js can use WebGL to render your scenes on all modern browsers. For older browsers, especially Internet Explorer 10 and below, you may have to fallback to one of the other [link:https://github.com/mrdoob/three.js/tree/master/examples/jsm/renderers renderers] (CSS2DRenderer, CSS3DRenderer, SVGRenderer). Additionally, you may have to include some polyfills, especially if you are using files from the [link:https://github.com/mrdoob/three.js/tree/master/examples /examples] folder.
+			モダンなブラウザ上であれば、Three.jsはWebGLを使ってsceneを描画出来ます。古いブラウザ(特にInternet Explore 10以下)では、他の[link:https://github.com/mrdoob/three.js/tree/master/examples/jsm/renderers renderers] (CSS2DRenderer, CSS3DRenderer, SVGRenderer)に後方互換する必要があるでしょう。さらに、特に [link:https://github.com/mrdoob/three.js/tree/master/examples /examples] フォルダのファイルを使用している場合は、いくつかのpolyfillを含める必要がある可能性があります。
 		</p>
 		<p>
-			Note: if you don't need to support these old browsers, then it is not recommended to use the other renderers as they are slower and support less features than the WebGLRenderer.
-		</p>
-	</div>
-
-	<h2>Browsers that support WebGL</h2>
-	<div>
-		<p>
-			Google Chrome 9+, Firefox 4+, Opera 15+, Safari 5.1+, Internet Explorer 11 and Microsoft Edge. You can find which browsers support WebGL at [link:https://caniuse.com/#feat=webgl Can I use WebGL].
+			注意事項: もし古いブラウザをサポートする必要がないなら、WebGLRenderer以外を使うことはおすすめしません。というのも、他のrendererは遅い上に、サポートしている機能が少ないからです。
 		</p>
 	</div>
 
-	<h2>JavaScript Language Features or Web APIs Used in three.js</h2>
+	<h2>WebGLをサポートしているブラウザ</h2>
 	<div>
 		<p>
-			Here are some features used in three.js. Some of them may require additional polyfills.
+			Google Chrome 9以上、Firefox 4以上、Opera 15以上、Safari 5.1以上、Internet Explore 11以上、もしくはMicrosoft Edge。
+			どのブラウザがWebGLをサポートしているのかは[link:https://caniuse.com/#feat=webgl Can I use WebGL]を確認してください。
+		</p>
+	</div>
+
+	<h2>three.jsで使用されるJavaScriptの機能とWeb APIs</h2>
+	<div>
+		<p>
+			three.jsで使われる機能の中には追加のpolyfillsが必要になるものがあります。
 		</p>
 		<table>
 			<thead>
 				<tr>
-					<th>Feature</th>
-					<th>Use Scope</th>
-					<th>Modules</th>
+					<th>機能</th>
+					<th>スコープ</th>
+					<th>モジュール</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -91,14 +92,18 @@
 
 	<h2>Polyfills</h2>
 	<div>
-		<p>Just import polyfills based on your requirements. Taking IE9 as an example, you need to polyfill at least these features:</p>
+		<p>
+			Just import polyfills based on your requirements. Taking IE9 as an example, you need to polyfill at least these features:
+
+			要件に応じてポリフィルをインポートするだけです。例えば、IE9の場合は少なくとも以下の機能を追加する必要があります。
+		</p>
 		<ul>
 			<li>Typed Arrays</li>
 			<li>Blob</li>
 		</ul>
 	</div>
 
-	<h3>Suggested polyfills</h3>
+	<h3>おすすめのpolyfills</h3>
 	<div>
 		<ul>
 			<li>
