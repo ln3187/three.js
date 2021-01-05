@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
 	<head>
 		<meta charset="utf-8">
 		<base href="../../../" />
@@ -9,26 +9,26 @@
 	<body>
 		<h1>[name]</h1>
 		<p>
-			If you use just procedural geometries and don't load any textures, webpages should work
-			straight from the file system, just double-click on HTML file in a file manager and it
-			should appear working in the browser (you'll see <em>file:///yourFile.html</em> in the address bar).
+			テクスチャを呼び出さずに、手続き型の幾何学図形を使うだけならウェブページをファイルシステムからそのまま動かすことができます。ファイルマネージャのHTMLファイルをダブルクリックすると、ブラウザで動作するはずです。(ブラウザのアドレスバーには<em>file:///yourFile.html</em>と表示されているでしょう)
 		</p>
 
-		<h2>Content loaded from external files</h2>
+		<h2>外部のファイルからコンテンツを読み込む</h2>
 		<div>
 			<p>
 				If you load models or textures from external files, due to browsers' [link:http://en.wikipedia.org/wiki/Same_origin_policy same origin policy]
-			 	security restrictions, loading from a file system will fail with a security exception.
+				 security restrictions, loading from a file system will fail with a security exception.
+				 
+				 外部ファイルからテクスチャやモジュールを読み込む場合、ブラウザのセキュリティ制限によって、ファイルシステムからの読み込みは失敗します。
 		 	</p>
 
-			<p>There are two ways to solve this:</p>
+			<p>これを解決するには2つの方法があります。/p>
 
 			<ol>
 				<li>
-					Change security for local files in a browser. This allows you to access your page as: <code>file:///yourFile.html</code>
+					ブラウザのローカルファイルに対するセキュリティ設定を変更することです。これによって、<code>file:///yourFile.html</code>といったローカルのファイルにアクセスできるようになります。
 				</li>
 				<li>
-					Run files from a local web server. This allows you to access your page as: <code>http://localhost/yourFile.html</code>
+					もうひとつは、ローカルのサーバからファイルを起動することです。こうすることで、<code>http://localhost/yourFile.html</code>にアクセスできるようになります。
 				</li>
 			</ol>
 
@@ -36,6 +36,8 @@
 				If you use option 1, be aware that you may open yourself to some vulnerabilities if using
 				the same browser for a regular web surfing. You may want to create a separate browser
 				profile / shortcut used just for local development to be safe. Let's go over each option in turn.
+
+				1つ目の方法を使う場合、いつも使用しているブラウザを使用すると、自ら脆弱性を露呈させかねないことに注意してください。
 			</p>
 		</div>
 
