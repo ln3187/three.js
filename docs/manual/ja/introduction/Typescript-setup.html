@@ -10,15 +10,12 @@
 		<h1>[name]</h1>
 
 		<p>
-			three.js is a JavaScript-based library. However, it's possible to use it in a TypeScript project, as the library
-			exposes [link:https://www.typescriptlang.org/docs/handbook/declaration-files/introduction.html Declaration Files] (*d.ts* files).
+			three.jsはJavaScriptベースのライブラリですが、[link:https://www.typescriptlang.org/docs/handbook/declaration-files/introduction.html 宣言ファイル](*d.ts*　ファイル)は公開されているので、TypeScriptプロジェクトで使用することも可能です。
 		</p>
 
 		<p>
-			A minimal configuration is required for the TypeScript compiler to
-			discover three.js types.<br>
-			You will need to set the [link:https://www.typescriptlang.org/docs/handbook/module-resolution.html moduleResolution]
-			option to *node*, and the [link:https://www.typescriptlang.org/docs/handbook/compiler-options.html target] option to *es6* or newer.
+			Typescriptのコンパイラがthree.jsの型を判別するために最小限の設定は必要です。<br>
+			[link:https://www.typescriptlang.org/docs/handbook/module-resolution.html moduleResolution]を *node* に、[link:https://www.typescriptlang.org/docs/handbook/compiler-options.html target]を *es6* 以降に設定する必要があります。
 		</p>
 
 		<code>
@@ -33,13 +30,11 @@
 		</code>
 
 		<p>
-			Note: As of today, it's not yet possible to use three.js typings without using those two options.
+			注意事項 : 今のところ、この２つのオプションを使わずにthree.jsの型を使うことはできません。
 		</p>
 
 		<p>
-			Note: It happens that some declarations are incorrect and/or missing.
-			Contributing to Declaration Files is really helpful for the community, making three.js
-			typings better and more accurate.
+			注意事項 : いくつかの宣言が間違っていたり欠けていたりすることがあります。宣言ファイルの改良に貢献することは、コミュニティにとって非常に有益であり、three.jsの型付けをより正確で良いものにします。
 		</p>
 	</body>
 </html>

@@ -1,87 +1,81 @@
 <!DOCTYPE html>
 <html lang="ja">
-	<head>
-		<meta charset="utf-8">
-		<base href="../../../" />
-		<script src="page.js"></script>
-		<link type="text/css" rel="stylesheet" href="page.css" />
-	</head>
-	<body>
-		<h1>[name]</h1>
+
+<head>
+	<meta charset="utf-8">
+	<base href="../../../" />
+	<script src="page.js"></script>
+	<link type="text/css" rel="stylesheet" href="page.css" />
+</head>
+
+<body>
+	<h1>[name]</h1>
+	<p>
+		テクスチャを呼び出さずに、手続き型の幾何学図形を使うだけならウェブページをファイルシステムからそのまま動かすことができます。ファイルマネージャのHTMLファイルをダブルクリックすると、ブラウザで動作するはずです。(ブラウザのアドレスバーには<em>file:///yourFile.html</em>と表示されているでしょう)
+	</p>
+
+	<h2>外部のファイルからコンテンツを読み込む</h2>
+	<div>
 		<p>
-			テクスチャを呼び出さずに、手続き型の幾何学図形を使うだけならウェブページをファイルシステムからそのまま動かすことができます。ファイルマネージャのHTMLファイルをダブルクリックすると、ブラウザで動作するはずです。(ブラウザのアドレスバーには<em>file:///yourFile.html</em>と表示されているでしょう)
+			外部ファイルからテクスチャやモジュールを読み込む場合、ブラウザのセキュリティ制限によって、ファイルシステムからの読み込みは失敗します。
 		</p>
 
-		<h2>外部のファイルからコンテンツを読み込む</h2>
+		<p>これを解決するには2つの方法があります。/p>
+
+		<ol>
+			<li>
+				ブラウザのローカルファイルに対するセキュリティ設定を変更することです。これによって、<code>file:///yourFile.html</code>といったローカルのファイルにアクセスできるようになります。
+			</li>
+			<li>
+				もうひとつは、ローカルのサーバからファイルを起動することです。こうすることで、<code>http://localhost/yourFile.html</code>にアクセスできるようになります。
+			</li>
+		</ol>
+
+		<p>
+			1つ目の方法を使う場合、いつも使用しているブラウザを使用すると、自ら脆弱性を露呈させかねないことに注意してください。念のため、ローカル開発専用のブラウザプロファイル/ショートカットを分けて作成しておいた方が良いかもしれません。それぞれのオプションを順番に紹介します。
+		</p>
+	</div>
+
+
+	<h2>ローカルでサーバを動かす</h2>
+	<div>
+		<p>
+			ほとんどのプログラム言語は組み込みの簡単なHTTPサーバが使えます。こういった組み込みのサーバは、ApacheやNginxなどの本番用に使用されるサーバと比べると機能が少ないですが、three.jsを試してみるには十分な機能があります
+		</p>
+
+		<h3>コードエディタのプラグイン</h3>
+		<div>
+			<p>コードエディタの中には、オンデマンドでシンプルなサーバを起動するプラグインがありものがあります</p>
+			<ul>
+				<li>Visual Studio Codeの[link:https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer
+					Live Server]</li>
+				<li>Atomの[link:https://atom.io/packages/atom-live-server Live Server]</li>
+			</ul>
+		</div>
+
+		<h3>Servez</h3>
 		<div>
 			<p>
-				If you load models or textures from external files, due to browsers' [link:http://en.wikipedia.org/wiki/Same_origin_policy same origin policy]
-				 security restrictions, loading from a file system will fail with a security exception.
-				 
-				 外部ファイルからテクスチャやモジュールを読み込む場合、ブラウザのセキュリティ制限によって、ファイルシステムからの読み込みは失敗します。
-		 	</p>
-
-			<p>これを解決するには2つの方法があります。/p>
-
-			<ol>
-				<li>
-					ブラウザのローカルファイルに対するセキュリティ設定を変更することです。これによって、<code>file:///yourFile.html</code>といったローカルのファイルにアクセスできるようになります。
-				</li>
-				<li>
-					もうひとつは、ローカルのサーバからファイルを起動することです。こうすることで、<code>http://localhost/yourFile.html</code>にアクセスできるようになります。
-				</li>
-			</ol>
-
-			<p>
-				If you use option 1, be aware that you may open yourself to some vulnerabilities if using
-				the same browser for a regular web surfing. You may want to create a separate browser
-				profile / shortcut used just for local development to be safe. Let's go over each option in turn.
-
-				1つ目の方法を使う場合、いつも使用しているブラウザを使用すると、自ら脆弱性を露呈させかねないことに注意してください。
+				[link:https://greggman.github.io/servez Servez]はGUI
+				で操作できるシンプルなサーバです。
 			</p>
 		</div>
 
+		<h3>Node.js http-server</h3>
+		<div>
+			<p>Node.jsにはシンプルなHTTPサーバーパッケージがあります。インストールするには以下のコマンドを実行してください。</p>
+			<code>npm install http-server -g</code>
 
-		<h2>Run a local server</h2>
+			<p>ローカル環境で実行するには以下のようにしてください</p>
+			<code>http-server . -p 8000</code>
+		</div>
+
+		<h3>Python server</h3>
 		<div>
 			<p>
-				Many programming languages have simple HTTP servers built in. They are not as full featured as
-				production servers such as [link:https://www.apache.org/ Apache] or [link:https://nginx.org NGINX], however they should be sufficient for testing your
-				three.js application.
+				[link:http://python.org/ Python]がインストールされている場合、作業ディレクトリで以下のようにコマンドライン実行すれば、サーバを動かすことができます。
 			</p>
-			
-			<h3>Plugins for popular code editors</h3>
-			<div>
-				<p>Some code editors have plugins which will spawn a simple server on demand.</p>
-				<ul>
-					<li>[link:https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer Live Server] for Visual Studio Code.</li>
-					<li>[link:https://atom.io/packages/atom-live-server Live Server] for Atom.</li>
-				</ul>
-			</div>
-
-			<h3>Servez</h3>
-			<div>
-				<p>
-					[link:https://greggman.github.io/servez Servez] is a simple server with a GUI.
-				</p>
-			</div>
-
-			<h3>Node.js http-server</h3>
-			<div>
-				<p>Node.js has a simple HTTP server package. To install:</p>
-				<code>npm install http-server -g</code>
-
-				<p>To run (from your local directory):</p>
-				<code>http-server . -p 8000</code>
-			</div>
-
-			<h3>Python server</h3>
-			<div>
-				<p>
-					If you have [link:http://python.org/ Python] installed, it should be enough to run this
-					from a command line (from your working directory):
-				</p>
-				<code>
+			<code>
 //Python 2.x
 python -m SimpleHTTPServer
 
@@ -89,66 +83,74 @@ python -m SimpleHTTPServer
 python -m http.server
 				</code>
 
-				<p>This will serve files from the current directory at localhost under port 8000, i.e in the address bar type:</p>
-
-				<code>http://localhost:8000/</code>
-			</div>
-
-			<h3>Ruby server</h3>
-			<div>
-				<p>If you have Ruby installed, you can get the same result running this instead:</p>
-				<code>
-ruby -r webrick -e "s = WEBrick::HTTPServer.new(:Port => 8000, :DocumentRoot => Dir.pwd); trap('INT') { s.shutdown }; s.start"
-				</code>
-			</div>
-
-			<h3>PHP server</h3>
-			<div>
-				<p>PHP also has a built-in web server, starting with php 5.4.0:</p>
-				<code>php -S localhost:8000</code>
-			</div>
-
-			<h3>Lighttpd</h3>
-			<div>
-				<p>
-					Lighttpd is a very lightweight general purpose webserver. We'll cover installing it on OSX with
-					HomeBrew here. Unlike the other servers discussed here, lighttpd is a full fledged production
-					ready server.
-				</p>
-
-				<ol>
-					<li>
-						Install it via homebrew
-						<code>brew install lighttpd</code>
-					</li>
-					<li>
-						Create a configuration file called lighttpd.conf in the directory where you want to run
-						your webserver. There is a sample [link:http://redmine.lighttpd.net/projects/lighttpd/wiki/TutorialConfiguration here].
-					 </li>
-					<li>
-						In the conf file, change the server.document-root to the directory you want to serve files from.
-					</li>
-					<li>
-						Start it with
-						<code>lighttpd -f lighttpd.conf</code>
-					</li>
-					<li>
-						Navigate to http://localhost:3000/ and it will serve static files from the directory you
-						chose.
-					</li>
-				</ol>
-			</div>
-			<h3>IIS</h3>
-			<div>
-				<p>If you are using Microsoft IIS as web server. Please add a MIME type settings regarding .fbx extension before loading.</p>
-				<code>File name extension: fbx        MIME Type: text/plain</code>
-				<p>By default, IIS blocks .fbx, .obj files downloads. You have to configure IIS to enable these kind of files can be download.</p>
-			</div>
 			<p>
-				Other simple alternatives are [link:http://stackoverflow.com/q/12905426/24874 discussed here]
-				on Stack Overflow.
+				このようにすることで、ローカルホストのカレントディレクトリから8000番ポートでファイルが提供されます。提供されるファイルを見るためには、ブラウザのアドレスバーに以下のように入力してください。
 			</p>
+
+			<code>http://localhost:8000/</code>
 		</div>
 
-	</body>
+		<h3>Ruby server</h3>
+		<div>
+			<p>Rubyがインストールされている環境の場合、代わりに以下のコマンドを実行することでサーバを動かすことができます。</p>
+			<code>
+ruby -r webrick -e "s = WEBrick::HTTPServer.new(:Port => 8000, :DocumentRoot => Dir.pwd); trap('INT') { s.shutdown }; s.start"
+				</code>
+		</div>
+
+		<h3>PHP server</h3>
+		<div>
+			<p>PHPにも組み込みのwebサーバがあるので、phpの5.4.0で以下のように実行してみてください</p>
+			<code>php -S localhost:8000</code>
+		</div>
+
+		<h3>Lighttpd</h3>
+		<div>
+			<p>
+				Lighttpd は非常に軽量な汎用ウェブサーバです。ここではOSXにHomeBrewでインストールする方法を説明します。ここで説明した他のサーバとは異なり、lighttpd
+				は本格的な本番環境に対応したサーバです。
+			</p>
+
+			<ol>
+				<li>
+					homebrewでLighttpdをインストールする
+					<code>brew install lighttpd</code>
+				</li>
+				<li>
+					ウェブサーバを動作させたいディレクトリにlighttpd.confという設定ファイルを作成します。
+					[link:http://redmine.lighttpd.net/projects/lighttpd/wiki/TutorialConfigurationこちらに]サンプルがあります。
+				</li>
+				<li>
+					設定ファイルでserver.document-rootを提供したいファイルが置いてあるディレクトリに変更してください
+				</li>
+				<li>
+					Lighttpdは以下のコマンドで実行できます。
+					<code>lighttpd -f lighttpd.conf</code>
+				</li>
+				<li>
+					Navigate to http://localhost:3000/ and it will serve static files from the directory you
+					chose.
+
+					http://localhost:3000/ に移動すると、選択したディレクトリから静的ファイルを提供します。
+				</li>
+			</ol>
+		</div>
+		<h3>IIS</h3>
+		<div>
+			<p>
+				WebサーバにMicrosoft IISを使用している場合ロードする前に.fbx拡張子に関するMIMEタイプの設定を追加してください。
+			</p>
+			<code>File name extension: fbx        MIME Type: text/plain</code>
+			<p>
+				デフォルトではIISは.fbxや.objのファイルをダウンロードするのをブロックします。そのため、IISがそういったファイル(.fbxなど)をダウンロードできるように設定を変更する必要があります。
+			
+			</p>
+		</div>
+		<p>
+			他のシンプルな方法はStack Overflowの[link:http://stackoverflow.com/q/12905426/24874 ここ]で議論されています。
+		</p>
+	</div>
+
+</body>
+
 </html>

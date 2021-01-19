@@ -1,61 +1,66 @@
 <!DOCTYPE html>
-<html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<base href="../../../" />
-		<script src="page.js"></script>
-		<link type="text/css" rel="stylesheet" href="page.css" />
-	</head>
-	<body>
-		<h1>[name]</h1>
-		<div>
-			<p>All objects by default automatically update their matrices if they have been added to the scene with</p>
-			<code>
+<html lang="ja">
+
+<head>
+	<meta charset="utf-8">
+	<base href="../../../" />
+	<script src="page.js"></script>
+	<link type="text/css" rel="stylesheet" href="page.css" />
+</head>
+
+<body>
+	<h1>[name]</h1>
+	<div>
+		<p>
+			下記のコードのようにシーンに追加されたオブジェクトはデフォルトで自動的にマトリクスを更新します。
+		</p>
+		<code>
 const object = new THREE.Object3D();
 scene.add( object );
 			</code>
-			or if they are the child of another object that has been added to the scene:
-			<code>
+		もしくは、シーンに親オブジェクトが追加されると子オブジェクトも自動的に更新されます。
+		<code>
 const object1 = new THREE.Object3D();
 const object2 = new THREE.Object3D();
 
 object1.add( object2 );
 scene.add( object1 ); //object1 and object2 will automatically update their matrices
 			</code>
-		</div>
+	</div>
 
-		<p>However, if you know the object will be static, you can disable this and update the transform matrix manually just when needed.</p>
+	<p>
+		しかしながら、オブジェクトが静的なものであると分かっている場合は、自動更新を無効にして必要な時だけ、更新することが出来ます。
+	</p>
 
-		<code>
+	<code>
 object.matrixAutoUpdate  = false;
 object.updateMatrix();
 		</code>
 
-		<h2>BufferGeometry</h2>
-		<div>
-			<p>
-				BufferGeometries store information (such as vertex positions, face indices, normals, colors,
-				UVs, and any custom attributes) in [page:BufferAttribute buffers] - that is,
-				[link:https://developer.mozilla.org/en-US/docs/Web/JavaScript/Typed_arrays typed arrays].
-				This makes them generally faster than standard Geometries, at the cost of being somewhat harder to
-				work with.
-			</p>
-			<p>
-				With regards to updating BufferGeometries, the most important thing to understand is that
-				you cannot resize buffers (this is very costly,	basically the equivalent to creating a new geometry).
-				You can however update the content of buffers.
-			</p>
-			<p>
-				This means that if you know an attribute of your BufferGeometry will grow, say the number of vertices,
-				you must pre-allocate a buffer large enough to hold any new vertices that may be created. Of
-				course, this also means that there will be a maximum size for your BufferGeometry - there is
-				no way to create a BufferGeometry that can efficiently be extended indefinitely.
-			</p>
-			<p>
-				We'll use the example of a line that gets extended at render time. We'll allocate space
-				in the buffer for 500 vertices but draw only two at first, using [page:BufferGeometry.drawRange].
-			</p>
-			<code>
+	<h2>BufferGeometry</h2>
+	<div>
+		<p>
+			BufferGeometriesは、情報（頂点の位置、面のインデックス、法線、色、UV、カスタム属性など）をバッファ、
+			つまり[link:https://developer.mozilla.org/en-US/docs/Web/JavaScript/Typed_arrays 型付の配列]に保存します。
+			このため、標準的なジオメトリよりも一般的に高速ですが、その反面、作業がやや難しくなっています。
+		</p>
+		<p>
+			BufferGeometriesの更新についてバッファのサイズを変更することができないということは理解しておく必要があります。(これは非常にコストがかかり、基本的には新しいジオメトリを作成するのと同じです）。しかし、バッファの内容を更新することはできます。
+
+		</p>
+		<p>
+			つまり、BufferGeometry の属性（例えば頂点の数など）が増加することがわかっている場合、
+			新たに作成される可能性のある頂点を保持するのに十分な大きさのバッファを事前に確保しておく必要があります。
+			もちろん、これはBufferGeometryの最大サイズが存在することになります。
+		</p>
+		<p>
+			We'll use the example of a line that gets extended at render time. We'll allocate space
+			in the buffer for 500 vertices but draw only two at first, using [page:BufferGeometry.drawRange].
+
+			ここでは、レンダリング時に拡張される線の例を使用します。
+			バッファに500頂点分のスペースを確保しますが、[page:BufferGeometry.drawRange]を使って最初は2つだけ描画します。
+		</p>
+		<code>
 const MAX_POINTS = 500;
 
 // geometry
@@ -76,10 +81,10 @@ const material = new THREE.LineBasicMaterial( { color: 0xff0000 } );
 const line = new THREE.Line( geometry,  material );
 scene.add( line );
 			</code>
-		 	<p>
-				Next we'll randomly add points to the line using a pattern like:
-			</p>
-			<code>
+		<p>
+			次に以下のようにして、線上にランダムに点を追加してみましょう。
+		</p>
+		<code>
 const positions = line.geometry.attributes.position.array;
 
 let x, y, z, index;
@@ -97,52 +102,57 @@ for ( let i = 0, l = MAX_POINTS; i < l; i ++ ) {
 
 }
 			</code>
-			<p>
-				If you want to change the <em>number of points</em> rendered after the first render, do this:
-			</p>
-			<code>
+		<p>
+			もし、最初の描画以降に<em>点の数</em>を変更したい場合は、以下のようにしてください。
+		</p>
+		<code>
 line.geometry.setDrawRange( 0, newValue );
 			</code>
-			<p>
-				If you want to change the position data values after the first render, you need to
-				set the needsUpdate flag like so:
-			</p>
-			<code>
+		<p>
+			最初の描画以降に位置データの値を変更したい場合は、needsUpdateをtrueにセットする必要があります。
+		</p>
+		<code>
 line.geometry.attributes.position.needsUpdate = true; // required after the first render
 			</code>
 
-			<p>
-				If you change the position data values after the initial render, you may need to recompute
-				bounding volumes so other features of the engine like view frustum culling or helpers properly work.
-			</p>
-			<code>
+		<p>
+			If you change the position data values after the initial render, you may need to recompute
+			bounding volumes so other features of the engine like view frustum culling or helpers properly work.
+
+			最初の描画以降に位置データの値を変更した場合は、frustum cullingやヘルパーといったエンジンの他の機能がちゃんと機能するようにboundingボリュームを再計算する必要があるかもしれません。
+		</p>
+		<code>
 line.geometry.computeBoundingBox();
 line.geometry.computeBoundingSphere();
 			</code>
 
-			<p>
-				[link:http://jsfiddle.net/w67tzfhx/ Here is a fiddle] showing an animated line which you can adapt to your use case.
-			</p>
+		<p>
+			[link:http://jsfiddle.net/w67tzfhx/ Here is a fiddle] showing an animated line which you can adapt to your
+			use case.
 
-			<h3>Examples</h3>
+			[link:http://jsfiddle.net/w67tzfhx/ ここでは]あなたのユースケースに合わせることができるアニメーションを表示しています。
+		</p>
 
-			<p>
-				[example:webgl_custom_attributes WebGL / custom / attributes]<br />
-				[example:webgl_buffergeometry_custom_attributes_particles WebGL / buffergeometry / custom / attributes / particles]
-			</p>
+		<h3>Examples</h3>
 
-		</div>
+		<p>
+			[example:webgl_custom_attributes WebGL / custom / attributes]<br />
+			[example:webgl_buffergeometry_custom_attributes_particles WebGL / buffergeometry / custom / attributes /
+			particles]
+		</p>
 
-		<h2>Geometry</h2>
-		<div>
-			<p>
-				The following flags control updating of various geometry attributes. Set flags only
-				for attributes that you need to update, updates are costly. Once buffers
-				change, these flags reset automatically back to false. You need to keep setting them to
-				true if you want to keep updating buffers. Note that this applies only to [page:Geometry]
-				and not to [page:BufferGeometry].
-			</p>
-			<code>
+	</div>
+
+	<h2>Geometry</h2>
+	<div>
+		<p>
+			下記に示してあるフラグはさまざまなジオメトリの要素の更新をコントロールします。
+			更新にはコストがかかるので、更新が必要な要素のみを、更新するように設定してください。
+			バッファが変化すると、自動的にこれらのフラグはflaseにリセットされます。
+			バッファを更新し続けたいのであれば、このフラグをtrueに設定し続ける必要があります。
+			これは[page:Geometry]にのみ適用されて、[page:BufferGeometry]には適用されないことに注意してください。
+		</p>
+		<code>
 const geometry = new THREE.Geometry();
 geometry.verticesNeedUpdate = true;
 geometry.elementsNeedUpdate = true;
@@ -153,103 +163,128 @@ geometry.colorsNeedUpdate = true;
 geometry.tangentsNeedUpdate = true;
 			</code>
 
-			<p>
-				In versions prior to [link:https://github.com/mrdoob/three.js/releases/tag/r66 r66] meshes
-				additionally need the <em>dynamic</em> flag enabled (to keep internal typed arrays):
-			</p>
+		<p>
+			[link:https://github.com/mrdoob/three.js/releases/tag/r66
+			r66]以前のバージョンでは、メッシュは<em>dynamic</em>フラグを有効にする必要があります。これは内部で型付き配列を保持するために必要になります。
+		</p>
 
-			<code>
+		<code>
 // removed after r66
 geometry.dynamic = true;
 			</code>
 
-		</div>
+	</div>
 
-		<h2>Materials</h2>
-		<div>
-			<p>All uniforms values can be changed freely (e.g. colors, textures, opacity, etc), values are sent to the shader every frame.</p>
+	<h2>Materials</h2>
+	<div>
+		<p>
+			ユニフォームの値(例えば、色やテクスチャや透明度)は自由に変更することが出来ます。
+			これらの値はフレームごとにシェーダに送られます。
+		</p>
 
-			<p>Also GLstate related parameters can change any time (depthTest, blending, polygonOffset, etc).</p>
+		<p>
+			GLstateに関連したパラメータ(depthTest, blending, polygonOffsetなど)もいつもでも変更出来ます。
+		</p>
 
-			<p>The following properties can't be easily changed at runtime (once the material is rendered at least once):</p>
-			<ul>
-				<li>numbers and types of uniforms</li>
-				<li>presence or not of
-					<ul>
-						<li>texture</li>
-						<li>fog</li>
-						<li>vertex colors</li>
-						<li>skinning</li>
-						<li>morphing</li>
-						<li>shadow map</li>
-						<li>alpha test</li>
-					</ul>
-				</li>
-			</ul>
+		<p>
+			The following properties can't be easily changed at runtime (once the material is rendered at least once):
 
-			<p>Changes in these require building of new shader program. You'll need to set</p>
-			<code>material.needsUpdate = true</code>
+			以下に示すパラメータはランタイム(マテリアルが一度描画された後)には簡単に変更ができません。
+		</p>
+		<ul>
+			<li>ユニフォームの種類や数</li>
+			<li>以下の要素の有無
+				<ul>
+					<li>texture</li>
+					<li>fog</li>
+					<li>vertex colors</li>
+					<li>skinning</li>
+					<li>morphing</li>
+					<li>shadow map</li>
+					<li>alpha test</li>
+				</ul>
+			</li>
+		</ul>
 
-			<p>Bear in mind this might be quite slow and induce jerkiness in framerate (especially on Windows, as shader compilation is slower in DirectX than OpenGL).</p>
+		<p>
+			これらの値を変更するのには新しいシェーダプログラムが必要です、そのためには以下のように設定してください。
+		</p>
+		<code>material.needsUpdate = true</code>
 
-			<p>For smoother experience you can emulate changes in these features to some degree by having "dummy" values like zero intensity lights, white textures, or zero density fog.</p>
+		<p>
+			こうすることで、プログラムはとても遅くなり、フレームレートが不安定になるかもしれないことを覚えておいてください。(特にWindowsでは、シェーダのコンパイルがOpenGLよりもDirectXの方が遅いので、より顕著に現れる可能性があります）。
+		</p>
 
-			<p>You can freely change the material used for geometry chunks, however you cannot change how an object is divided into chunks (according to face materials). </p>
+		<p>
+			より滑らかな体験を提供するために、明るさ0の光や、白紙のテクスチャ、密度0の霧といった"ダミー"の値を使うことで、これらの変化をある程度模倣することができます。
+		</p>
 
-			<h3>If you need to have different configurations of materials during runtime:</h3>
-			<p>If the number of materials / chunks is small, you could pre-divide the object beforehand (e.g. hair / face / body / upper clothes / trousers for a human, front / sides / top / glass / tire / interior for a car). </p>
+		<p>
+			ジオメトリチャンクに使用するマテリアルは自由に変更できますが、オブジェクトをチャンクに分割する方法は変更できません。オブジェクトをどのようにチャンクに分割するからは、表面のマテリアルによって決まります。
+		</p>
 
-			<p>If the number is large (e.g. each face could be potentially different), consider a different solution, such as using attributes / textures to drive different per-face look.</p>
-
-			<h3>Examples</h3>
-			<p>
-				[example:webgl_materials_car WebGL / materials / car]<br />
-				[example:webgl_postprocessing_dof WebGL / webgl_postprocessing / dof]
-			</p>
-		</div>
+		<h3>
+			ランタイムに異なるマテリアルの設定が必要な場合
+		</h3>
+		<p>
+			マテリアル/チャンクの数が少ない場合は、あらかじめオブジェクトを分割しておくことができます（例：人間の場合は髪/顔/胴体/上着/ズボン、車の場合はフロント/サイド/トップ/ガラス/タイヤ/内装）。
 
 
-		<h2>Textures</h2>
-		<div>
-			<p>Image, canvas, video and data textures need to have the following flag set if they are changed:</p>
-			<code>
+		</p>
+
+		<p>
+			数が多い場合（例えば、人の顔はそれぞれ違っている可能性があります）は、顔ごとに異なる外観にするために属性/テクスチャを使用するなど、別の解決策を検討してください。
+		</p>
+
+		<h3>Examples</h3>
+		<p>
+			[example:webgl_materials_car WebGL / materials / car]<br />
+			[example:webgl_postprocessing_dof WebGL / webgl_postprocessing / dof]
+		</p>
+	</div>
+
+
+	<h2>Textures</h2>
+	<div>
+		<p>
+			画像やcanvas、ビデオやデータのテクスチャが変化する場合は、以下のフラグを有効にする必要があります。
+		</p>
+		<code>
 				texture.needsUpdate = true;
 			</code>
-			<p>Render targets update automatically.</p>
+		<p>描画の対象が自動的に更新されます。</p>
 
-			<h3>Examples</h3>
-			<p>
-				[example:webgl_materials_video WebGL / materials / video]<br />
-				[example:webgl_rtt WebGL / rtt]
-			</p>
+		<h3>Examples</h3>
+		<p>
+			[example:webgl_materials_video WebGL / materials / video]<br />
+			[example:webgl_rtt WebGL / rtt]
+		</p>
 
-		</div>
+	</div>
 
 
-		<h2>Cameras</h2>
-		<div>
-			<p>A camera's position and target is updated automatically. If you need to change</p>
-			<ul>
-				<li>
-					fov
-				</li>
-				<li>
-					aspect
-				</li>
-				<li>
-					near
-				</li>
-				<li>
-					far
-				</li>
-			</ul>
-			<p>
-				then you'll need to recompute the projection matrix:
-			</p>
-			<code>
+	<h2>Cameras</h2>
+	<div>
+		<p>カメラの位置とターゲットは自動的に更新されます。以下の要素を変更する必要がある場合、projection matrixを再計算する必要があります。</p>
+		<ul>
+			<li>
+				fov
+			</li>
+			<li>
+				aspect
+			</li>
+			<li>
+				near
+			</li>
+			<li>
+				far
+			</li>
+		</ul>
+		<code>
 camera.aspect = window.innerWidth / window.innerHeight;
 camera.updateProjectionMatrix();
 			</code>
-		</div>
-	</body>
+	</div>
+</body>
+
 </html>
