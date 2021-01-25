@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
 	<head>
 		<meta charset="utf-8" />
 		<base href="../../../" />
@@ -9,43 +9,27 @@
 	<body>
 		<h1>[name]</h1>
 
-		<h2>Overview</h2>
+		<h2>概要</h2>
 
 		<p class="desc">
-			Within the three.js animation system you can animate various properties of your models:
-			the bones of a [page:SkinnedMesh skinned and rigged model],
-			[page:Geometry.morphTargets morph targets], different material properties (colors,
-			opacity, booleans), visibility and transforms. The animated properties can be faded in,
-			faded out, crossfaded and warped. The weight and time scales of different simultaneous
-			animations on the same object as well as on different objects can be changed
-			independently. Various animations on the same and on different objects can be
-			synchronized.<br /><br />
-
 			three.jsのアニメーションシステムの中では、モデルの様々なプロパティをアニメーション化できます。
-			例えば、装飾を行なったモデルの骨格や、モーフターゲット、異なるマテリアルの要素(色、不透明度、ブーリアン)、可視性、変形などを操作できます。
+			例えば、[page:SkinnedMesh 装飾を行なったモデル]の骨格や、[page:Geometry.morphTargets モーフターゲット]、異なるマテリアルの要素(色、不透明度、有無)、可視性、変形などを操作できます。
+			アニメーションの要素は、フェードインやフェードアウト、クロスフェード、重ね合わせが可能です。
+			同一のオブジェクトであっても異なるものであっても、異なるアニメーションの比重やタイムスケールは独立して変更出来ます。また、同じオブジェクトでも、異なるオブジェクトでもアニメーションは同期出来ます。<br /><br />
 
-			To achieve all this in one homogeneous system, the three.js animation system
-			[link:https://github.com/mrdoob/three.js/issues/6881 has completely changed in 2015]
-			(beware of outdated information!), and it has now an architecture similar to
-			Unity/Unreal Engine 4. This page gives a short overview of the main components of the
-			system and how they work together.
+			これらを一つのシステムで達成するために、three.jsのアニメーションシステムは[link:https://github.com/mrdoob/three.js/issues/6881 2015に完全に変更されました](古い情報に気をつけてください)。three.jsのアニメーションシステムは現在はUnityやUnreal Engine 4と似た設計になっています。このページではメインの要素と、それがどうやって動くのかを簡単に説明します。
 
 		</p>
 
 		<h3>Animation Clips</h3>
 
 		<p class="desc">
+			アニメーション付きの3Dオブジェクトをインポートすることに成功した場合(そのオブジェクトが骨格なのか、モーフターゲットなのか、はたまた両方なのかには関係なく)、レスポンスフィールドのうちの一つは"animations"という配列で、そのモデルの[page:AnimationClip AnimationClips]を含んでいるはずです(下記の利用可能なローダーを参照)。
+			アニメーション付きの3Dオブジェクトをインポートすることに成功する状況というのは、例えばBlenderから[link:https://github.com/KhronosGroup/glTF-Blender-IO glTF Blender exporter]でオブジェクトをエクスポートして、そのオブジェクトを[page:GLTFLoader]を使って、three.jsに読みこむ、といったことが挙げられます。<br /><br />
 
-			If you have successfully imported an animated 3D object (it doesn't matter if it has
-			bones or morph targets or both) — for example exporting it from Blender with the
-			[link:https://github.com/KhronosGroup/glTF-Blender-IO glTF Blender exporter] and
-			loading it into a three.js scene using [page:GLTFLoader] — one of the response fields
-			should be an array named "animations", containing the [page:AnimationClip AnimationClips]
-			for this model (see a list of possible loaders below).<br /><br />
-
-			Each *AnimationClip* usually holds the data for a certain activity of the object. If the
-			mesh is a character, for example, there may be one AnimationClip for a walkcycle, a second
-			for a jump, a third for sidestepping and so on.
+			
+			*AnimationClip*は普通、オブジェクトの特定の動作のデータを持っています。
+			例えば、メッシュの場合、1つめのAnimationClipはウォークサイクルのためのもの、2つ目のAnimationClipはジャンプ用の、3つ目はサイドステップ用という風に動作のデータをAnimationClipに持たせています。
 
 		</p>
 
@@ -53,17 +37,9 @@
 
 		<p class="desc">
 
-			Inside of such an *AnimationClip* the data for each animated property are stored in a
-			separate [page:KeyframeTrack]. Assuming a character object has a [page:Skeleton skeleton],
-			one keyframe track could store the data for the position changes of the lower arm bone
-			over time, a different track the data for the rotation changes of the same bone, a third
-			the track position, rotation or scaling of another bone, and so on. It should be clear,
-			that an AnimationClip can be composed of lots of such tracks.<br /><br />
+			こういった*AnimationClip*の中では、アニメーションの要素のデータは別の[page:KeyframeTrack]に保存されています。キャラクターオブジェクトが骨格を持っていると仮定すると、あるキートラックフレームは腕の下の方の骨の、位置の時間変化のデータを保存し、別のキートラックは同じ骨の回転成分の動きのデータを保存し、また別のキートラックは他の骨の位置や回転、スケールの変化といったデータを保存します。AnimationClipは、このようなたくさんのトラックで構成できることがわかります。
 
-			Assuming the model has [page:Geometry.morphTargets morph targets] (for example one morph
-			target showing a friendly face and another showing an angry face), each track holds the
-			information as to how the [page:Mesh.morphTargetInfluences influence] of a certain morph
-			target changes during the performance of the clip.
+			モデルが[page:Geometry.morphTargets morph targets]を持っていると仮定すると(例えば、友好的な顔から怒った顔にモーフィングするような場合)、それぞれのトラックは特定のモーフィングターゲットの[page:Mesh.morphTargetInfluences influence]がclipのパフォーマンス中にどうやって変化するかについての情報を持っています。
 
 		</p>
 
@@ -71,10 +47,7 @@
 
 		<p class="desc">
 
-			The stored data forms only the basis for the animations - actual playback is controlled by
-			the [page:AnimationMixer]. You can imagine this not only as a player for animations, but
-			as a simulation of a hardware like a real mixer console, which can control several animations
-			simultaneously, blending and merging them.
+			保存されたデータは、アニメーションのベースを形成するだけで、実際のアニメーションの再生は[page:AnimationMixer]によってコントロールされます。AnimationMixerはアニメーションのプレイヤーであるだけでなく、本物のミキサーコンソールのようなハードウェアのシミレーションでもあります。これによって、複数のアニメーションを同時にコントロールして、ブレンドしたり、マージしたり出来ます。
 
 		</p>
 
@@ -82,12 +55,7 @@
 
 		<p class="desc">
 
-			The *AnimationMixer* itself has only very few (general) properties and methods, because it
-			can be controlled by the [page:AnimationAction AnimationActions]. By configuring an
-			*AnimationAction* you can determine when a certain *AnimationClip* shall be played, paused
-			or stopped on one of the mixers, if and how often the clip has to be repeated, whether it
-			shall be performed with a fade or a time scaling, and some additional things, such crossfading
-			or synchronizing.
+			[page:AnimationAction AnimationActions]によってコントールできるので、*AnimationMixer*自体の(一般的な)メソッドやプロパティは少ないです。*AnimationAction*を設定することで、あるミキサー上での*AnimationClip*の再生や、一時停止、停止のタイミングであったり、clipをリピートする頻度やリピートの有無、フェードや時間変化の有無、クロスフェードやシンクロなどの補助的なことを設定することが出来ます。
 
 		</p>
 
@@ -95,17 +63,15 @@
 
 		<p class="desc">
 
-			If you want a group of objects to receive a shared animation state, you can use an
-			[page:AnimationObjectGroup].
+			オブジェクトのグループに、アニメーションの状態を受け取らせたい場合は、[page:AnimationObjectGroup]が使えます。
 
 		</p>
 
-		<h3>Supported Formats and Loaders</h3>
+		<h3>サポートされているフォーマットとloader</h3>
 
 		<p class="desc">
-			Note that not all model formats include animation (OBJ notably does not), and that only some
-			three.js loaders support [page:AnimationClip AnimationClip] sequences. Several that <i>do</i>
-			support this animation type:
+			全てのモデル形式がアニメーションを含んでいるわけではないことに注意してください(OBJは特に含まれていません)。
+			またthree.jsのloaderのうちのいくつかしか[page:AnimationClip AnimationClip]シーケンスをサポートしていないことにも注意してください。このアニメーションのタイプをサポートしているものがいくつかあります。
 		</p>
 
 			<ul>
@@ -118,8 +84,7 @@
 			</ul>
 
 		<p class="desc">
-			Note that 3ds max and Maya currently can't export multiple animations (meaning animations which are not
-			on the same timeline) directly to a single file.
+			3ds maxとMayaは今のところ、複数のアニメーション(同じタイムラインにないもの)を一つのファイルに直接エクスポートすることは出来ません
 		</p>
 
 		<h2>Example</h2>
