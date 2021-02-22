@@ -1,52 +1,54 @@
 <!DOCTYPE html>
-<html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<base href="../../../" />
-		<script src="page.js"></script>
-		<link type="text/css" rel="stylesheet" href="page.css" />
-	</head>
-	<body>
-		<h1>How to use post-processing</h1>
+<html lang="ja">
 
-		<p>
-			Many three.js applications render their 3D objects directly to the screen. Sometimes, however, you want to apply one or more graphical
-			effects like Depth-Of-Field, Bloom, Film Grain or various types of Anti-aliasing. Post-processing is a widely used approach
-			to implement such effects. First, the scene is rendered to a render target which represents a buffer in the video card's memory.
-			In the next step one or more post-processing passes apply filters and effects to the image buffer before it is eventually rendered to
-			the screen.
-		</p>
-		<p>
-			three.js provides a complete post-processing solution via [page:EffectComposer] to implement such a workflow.
-		</p>
+<head>
+	<meta charset="utf-8">
+	<base href="../../../" />
+	<script src="page.js"></script>
+	<link type="text/css" rel="stylesheet" href="page.css" />
+</head>
 
-		<h2>Workflow</h2>
+<body>
+	<h1>How to use post-processing(後処理の使い方)</h1>
 
-		<p>
-			The first step in the process is to import all necessary files from the examples directory. The guide assumes you are using the official
-			[link:https://www.npmjs.com/package/three npm package] of three.js. For our basic demo in this guide we need the following files.
-		</p>
+	<p>
+		three.jsアプリケーションの多くは3Dオブジェクトをスクリーンに直接描画します。
+		しかしながら時々、一つ以上のエフェクト(被写界深度,Bloom、フィルムグレイン、様々なアンチエイリアス効果など)を適用したい場合があります。こういったエフェクトを実装するためにpost-processingは広く使用されています。
+		まず、シーンはビデオカードメモリのバッファを表す描画対象に対して描画されます。
+		次に、最終的なスクリーンへのレンダリングの前に、1つ以上のpost-processingで画像バッファにフィルタとエフェクトを適用します。
+	</p>
+	<p>
+		こういったワークフローを実装するために、three.jsは[page:EffectComposer]で完全なpost-processingを提供しています。
+	</p>
 
-		<code>
+	<h2>Workflow</h2>
+
+	<p>
+		プロセスの一段階目はexampleディレクトリから必要なファイルを全てimportすることです。
+		このガイドではthree.jsの[link:https://www.npmjs.com/package/three npmの公式のパッケージ]を使っていると想定しています。
+		このガイドのデモでは下に示したファイルが必要です。
+	</p>
+
+	<code>
 		import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 		import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 		import { GlitchPass } from 'three/examples/jsm/postprocessing/GlitchPass.js';
 		</code>
 
-		<p>
-			After all files are successfully imported, we can create our composer by passing in an instance of [page:WebGLRenderer].
-		</p>
+	<p>
+		全てのファイルのimportが成功したのちに、[page:WebGLRenderer]のインスタンスを渡すことでcomposerを作成します。
+	</p>
 
-		<code>
+	<code>
 		const composer = new EffectComposer( renderer );
 		</code>
 
-		<p>
-			When using a composer, it's necessary to change the application's animation loop. Instead of calling the render method of
-			[page:WebGLRenderer], we now use the respective counterpart of [page:EffectComposer].
-		</p>
+	<p>
+		composerを使うときにはアプリケーションのアニメーションループを変更する必要があります。
+		[page:WebGLRenderer]のrenderメソッドを呼ぶ代わりに[page:EffectComposer]のそれぞれの対応するものを使います。
+	</p>
 
-		<code>
+	<code>
 		function animate() {
 
 			requestAnimationFrame( animate );
@@ -56,14 +58,15 @@
 		}
 		</code>
 
-		<p>
-			Our composer is now ready so it's possible to configure the chain of post-processing passes. These passes are responsible for creating
-			the final visual output of the application. They are processed in order of their addition/insertion. In our example, the instance of *RenderPass*
-			is executed first and then the instance of *GlitchPass*. The last enabled pass in the chain is automatically rendered to the screen. The setup
-			of the passes looks like so:
-		</p>
+	<p>
+		composerが準備できたので、post-processingパスのチェーンを設定できるようになりました。
+		これらのパスはアプリケーションの最終的なビジュアルを出力することに責任を持ちます。
+		これらのパスは追加/挿入の順番で処理されます。今回示している例では、*RenderPass*インスタンスがはじめに実行され、
+		それから*GlitchPass*インスタンスが実行されます。チェーンの中で最後の有効なpassが自動的に画面に描画されます。
+		passの設定は以下のように行います。
+	</p>
 
-		<code>
+	<code>
 		const renderPass = new RenderPass( scene, camera );
 		composer.addPass( renderPass );
 
@@ -71,27 +74,29 @@
 		composer.addPass( glitchPass );
 		</code>
 
-		<p>
-			*RenderPass* is normally placed at the beginning of the chain in order to provide the rendered scene as an input for the next post-processing step. In our case,
-			*GlitchPass* is going to use these image data to apply a wild glitch effect. Check out this [link:https://threejs.org/examples/webgl_postprocessing_glitch live example]
-			to see it in action.
-		</p>
+	<p>
+		*RenderPass*は普通チェインのはじめにあります。
+		これはレンダリングされたシーンを次のpost-processingの入力とするためです。
+		*GlitchPass*は、これらのイメージをワイルドなglitch effectを適用するために使います。
+		実際に動いているものを見るために、[link:https://threejs.org/examples/webgl_postprocessing_glitch このサンプル]を見てみましょう。
+	</p>
 
-		<h2>Built-in Passes</h2>
+	<h2>Built-in Passes(組み込みのpass)</h2>
 
-		<p>
-			You can use a wide range of pre-defined post-processing passes provided by the engine. They are located in the
-			[link:https://github.com/mrdoob/three.js/tree/dev/examples/jsm/postprocessing postprocessing] directory.
-		</p>
+	<p>
+		エンジンに元から入っている定義済みの後処理passが使えます。
+		このpassは[link:https://github.com/mrdoob/three.js/tree/dev/examples/jsm/postprocessing
+		postprocessing]ディレクトリに入っていて、広範囲に使用できます。
+	</p>
 
-		<h2>Custom Passes</h2>
+	<h2>Custom Passes(カスタムpass)</h2>
 
-		<p>
-			Sometimes you want to write a custom post-processing shader and include it into the chain of post-processing passes. For this scenario,
-			you can utilize *ShaderPass*. After importing the file and your custom shader, you can use the following code to setup the pass.
-		</p>
+	<p>
+		独自のpostprocessing shaderを書いて、post-processing passのチェーンの中に組み込みたい場合があります。そういった場合には、*ShaderPass*を利用することが出来ます。
+		ファイルと独自のshaderをインポートしたのちに、以下のコードでpassを設定することができます。
+	</p>
 
-		<code>
+	<code>
 		import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js';
 		import { LuminosityShader } from 'three/examples/jsm/shaders/LuminosityShader.js';
 
@@ -101,11 +106,11 @@
 		composer.addPass( luminosityPass );
 		</code>
 
-		<p>
-			The repository provides a file called [link:https://github.com/mrdoob/three.js/blob/master/examples/jsm/shaders/CopyShader.js CopyShader] which is a
-			good starting code for your own custom shader. *CopyShader* just copies the image contents of the [page:EffectComposer]'s read buffer
-			to its write buffer without applying any effects.
-		</p>
+	<p>
+		リポジトリには[link:https://github.com/mrdoob/three.js/blob/master/examples/jsm/shaders/CopyShader.js CopyShader]と呼ばれるファイルがあり、カスタムshaderを作る上での良いスタートコードです。
+		*CopyShader*はエフェクトを適用せずに、EffectComposerの読み込みバッファの画像内容を書き込みバッファにコピーするだけです。
+	</p>
 
-	</body>
+</body>
+
 </html>

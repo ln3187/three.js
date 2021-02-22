@@ -1,67 +1,88 @@
 <!DOCTYPE html>
-<html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<base href="../../../" />
-		<script src="page.js"></script>
-		<link type="text/css" rel="stylesheet" href="page.css" />
-	</head>
-	<body>
-		<h1>[name]</h1>
+<html lang="ja">
 
-		<p>
-		Three.js uses *matrices* to encode 3D transformations---translations (position), rotations, and scaling. Every instance of [page:Object3D] has a [page:Object3D.matrix matrix] which stores that object's position, rotation, and scale. This page describes how to update an object's transformation.
-		</p>
+<head>
+	<meta charset="utf-8">
+	<base href="../../../" />
+	<script src="page.js"></script>
+	<link type="text/css" rel="stylesheet" href="page.css" />
+</head>
 
-		<h2>Convenience properties and *matrixAutoUpdate*</h2>
+<body>
+	<h1>[name]</h1>
 
-		<p>
-			There are two ways to update an object's transformation:
-		</p>
-		<ol>
-			<li>
-				Modify the object's *position*, *quaternion*, and *scale* properties, and let three.js recompute
-				the object's matrix from these properties:
-				<code>
+	<p>
+		Three.jsは行列(*matrices*)を使って3次元変換(位置の変換、回転、スケーリング)をエンコードします。
+		すべての[page:Object3D]インスタンスは、そのオブジェクトの位置や回転、スケールを保存した行列([page:Object3D.matrix
+		matrix])を持っています。このページではオブジェクトの３次元変換をどうやって行うかを説明しています。
+
+	</p>
+
+	<h2>Convenience properties and *matrixAutoUpdate*(便利なプロパティとmatrixAutoUpdate)</h2>
+
+	<p>
+		オブジェクトの変換を更新するには二つの方法があります。
+	</p>
+	<ol>
+		<li>
+			オブジェクトの*位置*や*4元数*や*スケールのプロパティ*を変更することで、three.jsに
+			オブジェクトの行列を再計算させます。
+			<code>
 object.position.copy( start_position );
 object.quaternion.copy( quaternion );
 				</code>
-				By default, the *matrixAutoUpdate* property is set true, and the matrix will be automatically recalculated.
-				If the object is static, or you wish to manually control when recalculation occurs, better performance can be obtained by setting the property false:
-				<code>
+			デフォルトでは、*matrixAutoUpdate*のプロパティはtrueで、行列は自動的に再計算されます。
+			オブジェクトが静的な場合や、再計算するタイミングを制御したい場合は、このプロパティをfalseに設定することでパフォーマンスが改善する可能性があります。
+
+			<code>
 object.matrixAutoUpdate = false;
 				</code>
-				And after changing any properties, manually update the matrix:
-				<code>
+			プロパティを変更した後には、行列を手動で更新してください。
+			<code>
 object.updateMatrix();
 				</code>
-			</li>
-			<li>
-				Modify the object's matrix directly. The [page:Matrix4] class has various methods for modifying the matrix:
-				<code>
+		</li>
+		<li>
+			オブジェクトの行列を直接修正する方法です。
+			[page:Matrix4]クラスには行列を変更するための様々なメソッドがあります。
+			<code>
 object.matrix.setRotationFromQuaternion( quaternion );
 object.matrix.setPosition( start_position );
 object.matrixAutoUpdate = false;
 				</code>
-				Note that *matrixAutoUpdate* <em>must</em> be set to *false* in this case, and you should make sure <em>not</em> to call *updateMatrix*. Calling *updateMatrix* will clobber the manual changes made to the matrix, recalculating the matrix from *position*, *scale*, and so on.
-			</li>
-		</ol>
+			この場合 *matrixAutoUpdate*は*false*に設定<em>しなくてはならない</em>ことに注意してください。
+			また*updateMatrix*を呼ば<em>ない</em>ようにしてください。
+			*updateMatrix*を呼ぶと、行列にマニュアルで加えた変更がなくなり、*位置やスケール*などから行列が再計算されます。
+		</li>
+	</ol>
 
-		<h2>Object and world matrices</h2>
-		<p>
-		An object's [page:Object3D.matrix matrix] stores the object's transformation <em>relative</em> to the object's [page:Object3D.parent parent]; to get the object's transformation in <em>world</em> coordinates, you must access the object's [page:Object3D.matrixWorld].
-		</p>
-		<p>
-		When either the parent or the child object's transformation changes, you can request that the child object's [page:Object3D.matrixWorld matrixWorld] be updated by calling [page:Object3D.updateMatrixWorld updateMatrixWorld]().
-		</p>
+	<h2>Object and world matrices(オブジェクトとワールド座標系での行列)</h2>
+	<p>
+		オブジェクトの行列([page:Object3D.matrix matrix])は、[page:Object3D.parent 親オブジェクト]に対する<em>相対的な</em>変換を保持しています。
+		<em>ワールド座標系での</em>オブジェクトの変換を取得するには、オブジェクトの[page:Object3D.matrixWorld]にアクセスする必要があります。
 
-		<h2>Rotation and Quaternion</h2>
-		<p>
-		Three.js provides two ways of representing 3D rotations: [page:Euler Euler angles] and [page:Quaternion Quaternions], as well as methods for converting between the two. Euler angles are subject to a problem called "gimbal lock," where certain configurations can lose a degree of freedom (preventing the object from being rotated about one axis). For this reason, object rotations are <em>always</em> stored in the object's [page:Object3D.quaternion quaternion].
-		</p>
-		<p>
-		Previous versions of the library included a *useQuaternion* property which, when set to false, would cause the object's [page:Object3D.matrix matrix] to be calculated from an Euler angle. This practice is deprecated---instead, you should use the [page:Object3D.setRotationFromEuler setRotationFromEuler] method, which will update the quaternion.
-		</p>
+	</p>
+	<p>
+		親オブジェクトや子オブジェクトの変換が変更された場合は、[page:Object3D.updateMatrixWorld
+		updateMatrixWorld()]を呼び出すことで、子オブジェクトの[page:Object3D.matrixWorld matrixWorld]の更新を要求することができます。
+	</p>
 
-	</body>
+	<h2>Rotation and Quaternion(回転と四元数)</h2>
+	<p>
+		three.jsでは3次元の回線を表すためにオイラー角([page:Euler Euler angles])と4元数([page:Quaternion
+		Quaternions])という2つの方法があります。
+		また、three.jsではこの2つの間の変換メソッドも提供されています。
+		オイラー角はgimbal lockと呼ばれる問題の影響をうけることがあります。
+		gimbal lockが発生すると、特定の設定のときにオブジェクトの回転の自由度が失われます(オブジェクトが特定の軸方向に回転できなくなります)
+		このため、オブジェクトの回転は<em>つねに</em>オブジェクトの4元数([page:Object3D.quaternion quaternion])に保持されます。
+	</p>
+	<p>
+		以前のバージョンのライブラリには*useQuaternion*プロパティがあり、これをfalseに設定すると、
+		オブジェクトの行列([page:Object3D.matrix matrix])がオイラー角から計算されるようになっていました。
+		このやり方は古くなってきたので、代わりに[page:Object3D.setRotationFromEuler setRotationFromEuler]メソッドを使用して、
+		四元数を更新します。
+	</p>
+
+</body>
+
 </html>
