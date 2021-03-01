@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
 
 <head>
 	<meta charset="utf-8">
@@ -15,15 +15,20 @@
 		3D models are available in hundreds of file formats, each with different
 		purposes, assorted features, and varying complexity. Although
 		<a href="https://github.com/mrdoob/three.js/tree/dev/examples/jsm/loaders" target="_blank" rel="noopener">
-		three.js provides many loaders</a>, choosing the right format and
+			three.js provides many loaders</a>, choosing the right format and
 		workflow will save time and frustration later on. Some formats are
 		difficult to work with, inefficient for realtime experiences, or simply not
 		fully supported at this time.
+
+		3Dモデルはたくさんのファイル形式で利用可能で、それぞれに目的があり、複雑さも様々です。
+		three.jsは様々なloaderを提供していますが、適切な形式とワークフローを選択することで、パフォーマンスを改善することができます。うまく動作させるのが難しいフォーマットや、リアルタイムでの体験に適さないフォーマットもあり、中にはまったくサポートされていないフォーマットもあります。
 	</p>
 
 	<p>
 		This guide provides a workflow recommended for most users, and suggestions
 		for what to try if things don't go as expected.
+
+		このガイドでは、ほとんどのユーザにおすすめのワークフローと、予期しないことが発生したときに何を試してみればよいかを紹介します。
 	</p>
 
 	<h2>Before we start</h2>
@@ -33,6 +38,9 @@
 		[link:#manual/introduction/How-to-run-things-locally how to run things locally]
 		first. Many common errors viewing 3D models can be avoided by hosting files
 		correctly.
+
+		もしthree.jsをローカルサーバで動かすのが初めてなら、how to run things locallyを見てみてください。
+		3Dモデルを表示する際の多くの一般的なエラーはファイルを正しく配置することで防ぐことができます。
 	</p>
 
 	<h2>Recommended workflow</h2>
@@ -44,36 +52,55 @@
 		compact to transmit and fast to load. Features include meshes, materials,
 		textures, skins, skeletons, morph targets, animations, lights, and
 		cameras.
+
+		おすすめのワークフロー
+		可能なら、glTF(GL Transmission
+		Format)を使うことをおすすめします。glTFはGLBとGLTFの両方のフォーマットについてサポートしています。glTFはランタイムアセットの配信に注力しているので、変換時にはコンパクトでロードも早いです。機能としては、メッシュやマテリアル、テクスチャ、スキン、スケルトン、morphターゲット、アニメーション、ライト、カメラがあります。
 	</p>
 
 	<p>
 		Public-domain glTF files are available on sites like
-		<a href="https://sketchfab.com/models?features=downloadable&sort_by=-likeCount&type=models" target="_blank" rel="noopener">
-		Sketchfab</a>, or various tools include glTF export:
+		<a href="https://sketchfab.com/models?features=downloadable&sort_by=-likeCount&type=models" target="_blank"
+			rel="noopener">
+			Sketchfab</a>, or various tools include glTF export:
+
+		公開されているglTFファイルはSketchfabのようなサイトで利用可能です。
+		また様残なツールでglTF形式でexportすることが出来ます。
 	</p>
 
 	<ul>
 		<li><a href="https://www.blender.org/" target="_blank" rel="noopener">Blender</a> by the Blender Foundation</li>
-		<li><a href="https://www.allegorithmic.com/products/substance-painter" target="_blank" rel="noopener">Substance Painter</a> by Allegorithmic</li>
+		<li><a href="https://www.allegorithmic.com/products/substance-painter" target="_blank" rel="noopener">Substance
+				Painter</a> by Allegorithmic</li>
 		<li><a href="https://www.foundry.com/products/modo" target="_blank" rel="noopener">Modo</a> by Foundry</li>
 		<li><a href="https://www.marmoset.co/toolbag/" target="_blank" rel="noopener">Toolbag</a> by Marmoset</li>
 		<li><a href="https://www.sidefx.com/products/houdini/" target="_blank" rel="noopener">Houdini</a> by SideFX</li>
 		<li><a href="https://labs.maxon.net/?p=3360" target="_blank" rel="noopener">Cinema 4D</a> by MAXON</li>
-		<li><a href="https://github.com/KhronosGroup/COLLADA2GLTF" target="_blank" rel="noopener">COLLADA2GLTF</a> by the Khronos Group</li>
-		<li><a href="https://github.com/facebookincubator/FBX2glTF" target="_blank" rel="noopener">FBX2GLTF</a> by Facebook</li>
-		<li><a href="https://github.com/AnalyticalGraphicsInc/obj2gltf" target="_blank" rel="noopener">OBJ2GLTF</a> by Analytical Graphics Inc</li>
-		<li>&hellip;and <a href="http://github.khronos.org/glTF-Project-Explorer/" target="_blank" rel="noopener">many more</a></li>
+		<li><a href="https://github.com/KhronosGroup/COLLADA2GLTF" target="_blank" rel="noopener">COLLADA2GLTF</a> by
+			the Khronos Group</li>
+		<li><a href="https://github.com/facebookincubator/FBX2glTF" target="_blank" rel="noopener">FBX2GLTF</a> by
+			Facebook</li>
+		<li><a href="https://github.com/AnalyticalGraphicsInc/obj2gltf" target="_blank" rel="noopener">OBJ2GLTF</a> by
+			Analytical Graphics Inc</li>
+		<li>&hellip;and <a href="http://github.khronos.org/glTF-Project-Explorer/" target="_blank" rel="noopener">many
+				more</a></li>
 	</ul>
 
 	<p>
 		If your preferred tools do not support glTF, consider requesting glTF
 		export from the authors, or posting on
-		<a href="https://github.com/KhronosGroup/glTF/issues/1051" target="_blank" rel="noopener">the glTF roadmap thread</a>.
+		<a href="https://github.com/KhronosGroup/glTF/issues/1051" target="_blank" rel="noopener">the glTF roadmap
+			thread</a>.
+
+		glTFをサポートしていないツールが使いたい場合は、ツールの作者にglTFのエクスポートを依頼するか、glTFロードマップスレッドに投稿することを検討してください。
 	</p>
 
 	<p>
 		When glTF is not an option, popular formats such as FBX, OBJ, or COLLADA
 		are also available and regularly maintained.
+
+		glTFが選択肢にない場合は、FBX,OBJ,COLLADAといった一般的な形式も利用可能です。
+		これらは定期的にメンテナンスされています。
 	</p>
 
 	<h2>Loading</h2>
@@ -81,6 +108,10 @@
 	<p>
 		Only a few loaders (e.g. [page:ObjectLoader]) are included by default with
 		three.js — others should be added to your app individually.
+
+		ごく一部のローダ(例えば、ObjectLoader)はデフォルトでthree.jsに入っています。
+		ほかのものは、ユーザがそれぞれ自分のアプリに加える必要があります。
+
 	</p>
 
 	<code>
@@ -91,6 +122,9 @@
 		Once you've imported a loader, you're ready to add a model to your scene. Syntax varies among
 		different loaders — when using another format, check the examples and documentation for that
 		loader. For glTF, usage with global scripts would be:
+
+		ローダをimportした時点で、シーンにモデルを追加できるようになります。
+		文法はローダによって異なります。異なるフォーマットを使う場合は、そのローダのドキュメントやサンプルを確認してください。glTFの場合、グローバルスクリプトでは以下のように使用します。
 	</p>
 
 	<code>
@@ -117,12 +151,19 @@
 		You've spent hours modeling an artisanal masterpiece, you load it into
 		the webpage, and — oh no! 😭 It's distorted, miscolored, or missing entirely.
 		Start with these troubleshooting steps:
+
+		何時間もかけて傑作をモデリングしたのに、webpageに読み込むと、なんと！
+		歪んでいたり、色がおかしかったり、表示されなかったりすることがあります。
+		そういったときにはトラブルシューティングを始めましょう。
 	</p>
 
 	<ol>
 		<li>
 			Check the JavaScript console for errors, and make sure you've used an
 			<em>onError</em> callback when calling <em>.load()</em> to log the result.
+
+			JavaScriptコンソールでエラーが発生していないか確認し、.load() を呼び出す際にonErrorコールバックを使用して結果をログに記録していることを確認してください
+
 		</li>
 		<li>
 			View the model in another application. For glTF, drag-and-drop viewers
@@ -130,23 +171,38 @@
 			<a href="https://gltf-viewer.donmccurdy.com/" target="_blank" rel="noopener">three.js</a> and
 			<a href="http://sandbox.babylonjs.com/" target="_blank" rel="noopener">babylon.js</a>. If the model
 			appears correctly in one or more applications,
-			<a href="https://github.com/mrdoob/three.js/issues/new" target="_blank" rel="noopener">file a bug against three.js</a>.
+			<a href="https://github.com/mrdoob/three.js/issues/new" target="_blank" rel="noopener">file a bug against
+				three.js</a>.
 			If the model cannot be shown in any application, we strongly encourage
 			filing a bug with the application used to create the model.
+
+			モデルを別のアプリケーションで見てみてください。
+			glTFではthree.jsとbabylon.jsでドラックアンドドロップでviewerが利用できます。
+			一つ以上のアプリケーションでモデルが正しく表示された場合、three.jsにバグを報告してください。
+			モデルがどのアプリケーションでも表示できない場合、モデルを作成する際に使ったアプリにバグを報告することを強くお勧めします。
 		</li>
 		<li>
 			Try scaling the model up or down by a factor of 1000. Many models are
 			scaled differently, and large models may not appear if the camera is
 			inside the model.
+
+			モデルを1000倍にスケールアップしたり、スケールダウンしたりしてみてください。
+			多くのモデルはスケールが異なります。大きなモデルだと、カメラがモデルの中に入ってしまって見えなくなっていることがあります。
 		</li>
 		<li>
 			Try to add and position a light source. The model may be hidden in the dark.
+
+			光源を追加して配置してみてください。暗闇の中にモデルが隠れている可能性があります。
 		</li>
 		<li>
 			Look for failed texture requests in the network tab, like
 			<em>C:\\Path\To\Model\texture.jpg</em>. Use paths relative to your
 			model instead, such as <em>images/texture.jpg</em> — this may require
 			editing the model file in a text editor.
+
+			ネットワークタブで失敗しているテクスチャのリクエスト(例えば、C:\\Path\To\Model\texture.jpg)を探してみてください。見つかったら代わりに images/texture.jpg
+			のようなモデルへの相対パスを使ってください。
+			これはテキストエディタでモデルファイルを編集する必要があるかもしれません。
 		</li>
 	</ol>
 
@@ -156,10 +212,14 @@
 		If you've gone through the troubleshooting process above and your model
 		still isn't working, the right approach to asking for help will get you to
 		a solution faster. Post a question on the
-		<a href="https://discourse.threejs.org/" target="_blank" rel="noopener">three.js forum</a> and, whenever possible,
+		<a href="https://discourse.threejs.org/" target="_blank" rel="noopener">three.js forum</a> and, whenever
+		possible,
 		include your model (or a simpler model with the same problem) in any formats
 		you have available. Include enough information for someone else to reproduce
 		the issue quickly — ideally, a live demo.
+
+		上記のトラブルシューティングのプロセスを一通りやってもまだ動かない場合、正しいやり方で助けを求めることが
+		早期の解決につながります。three.jsのフォーラムに質問を投稿して、可能であれば自分のモデル(もしくは同じ問題を持つよりシンプルなモデル)を利用可能な形式で添付してください。他の人が問題を迅速に再現できるように、十分な情報を含めてください。
 	</p>
 
 </body>
