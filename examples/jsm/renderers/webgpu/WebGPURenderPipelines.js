@@ -7,25 +7,25 @@ import {
 	NoBlending, NormalBlending, AdditiveBlending, SubtractiveBlending, MultiplyBlending, CustomBlending,
 	AddEquation, SubtractEquation, ReverseSubtractEquation, MinEquation, MaxEquation,
 	ZeroFactor, OneFactor, SrcColorFactor, OneMinusSrcColorFactor, SrcAlphaFactor, OneMinusSrcAlphaFactor, DstAlphaFactor, OneMinusDstAlphaFactor, DstColorFactor, OneMinusDstColorFactor, SrcAlphaSaturateFactor
-} from '../../../../build/three.module.js';
-
-import ShaderLib from './ShaderLib.js';
+} from 'three';
 
 class WebGPURenderPipelines {
 
-	constructor( renderer, properties, device, glslang, sampleCount ) {
+	constructor( renderer, properties, device, glslang, sampleCount, nodes ) {
 
 		this.renderer = renderer;
 		this.properties = properties;
 		this.device = device;
 		this.glslang = glslang;
 		this.sampleCount = sampleCount;
+		this.nodes = nodes;
 
 		this.pipelines = new WeakMap();
 		this.shaderAttributes = new WeakMap();
+
 		this.shaderModules = {
-			vertex: new WeakMap(),
-			fragment: new WeakMap()
+			vertex: new Map(),
+			fragment: new Map()
 		};
 
 	}
@@ -51,67 +51,64 @@ class WebGPURenderPipelines {
 		if ( pipeline === undefined ) {
 
 			const device = this.device;
+			const properties = this.properties;
+
 			const material = object.material;
 
-			// shader source
+			// get shader
 
-			let shader;
-
-			if ( material.isMeshBasicMaterial ) {
-
-				shader = ShaderLib.meshBasic;
-
-			} else if ( material.isPointsMaterial ) {
-
-				shader = ShaderLib.pointsBasic;
-
-			} else if ( material.isLineBasicMaterial ) {
-
-				shader = ShaderLib.lineBasic;
-
-			} else {
-
-				console.error( 'THREE.WebGPURenderer: Unknwon shader type.' );
-
-			}
+			const nodeBuilder = this.nodes.get( object );
 
 			// shader modules
 
 			const glslang = this.glslang;
 
-			let moduleVertex = this.shaderModules.vertex.get( shader );
+			let moduleVertex = this.shaderModules.vertex.get( nodeBuilder.vertexShader );
 
 			if ( moduleVertex === undefined ) {
 
-				const byteCodeVertex = glslang.compileGLSL( shader.vertexShader, 'vertex' );
+				const byteCodeVertex = glslang.compileGLSL( nodeBuilder.vertexShader, 'vertex' );
 
 				moduleVertex = {
 					module: device.createShaderModule( { code: byteCodeVertex } ),
 					entryPoint: 'main'
 				};
 
-				this.shaderModules.vertex.set( shader, moduleVertex );
+				this.shaderModules.vertex.set( nodeBuilder.vertexShader, moduleVertex );
 
 			}
 
-			let moduleFragment = this.shaderModules.fragment.get( shader );
+			let moduleFragment = this.shaderModules.fragment.get( nodeBuilder.fragmentShader );
 
 			if ( moduleFragment === undefined ) {
 
-				const byteCodeFragment = glslang.compileGLSL( shader.fragmentShader, 'fragment' );
+				const byteCodeFragment = glslang.compileGLSL( nodeBuilder.fragmentShader, 'fragment' );
 
 				moduleFragment = {
 					module: device.createShaderModule( { code: byteCodeFragment } ),
 					entryPoint: 'main'
 				};
 
-				this.shaderModules.fragment.set( shader, moduleFragment );
+				this.shaderModules.fragment.set( nodeBuilder.fragmentShader, moduleFragment );
+
+			}
+
+			// dispose material
+
+			const materialProperties = properties.get( material );
+
+			if ( materialProperties.disposeCallback === undefined ) {
+
+				const disposeCallback = onMaterialDispose.bind( this );
+				materialProperties.disposeCallback = disposeCallback;
+
+				material.addEventListener( 'dispose', disposeCallback );
 
 			}
 
 			// determine shader attributes
 
-			const shaderAttributes = this._parseShaderAttributes( shader.vertexShader );
+			const shaderAttributes = this._parseShaderAttributes( nodeBuilder.vertexShader );
 
 			// vertex buffers
 
@@ -227,8 +224,8 @@ class WebGPURenderPipelines {
 		this.pipelines = new WeakMap();
 		this.shaderAttributes = new WeakMap();
 		this.shaderModules = {
-			vertex: new WeakMap(),
-			fragment: new WeakMap()
+			vertex: new Map(),
+			fragment: new Map()
 		};
 
 	}
@@ -737,20 +734,20 @@ class WebGPURenderPipelines {
 
 		// @TODO: This code is GLSL specific. We need to update when we switch to WGSL.
 
-		if ( type === 'float' ) return GPUVertexFormat.Float;
-		if ( type === 'vec2' ) return GPUVertexFormat.Float2;
-		if ( type === 'vec3' ) return GPUVertexFormat.Float3;
-		if ( type === 'vec4' ) return GPUVertexFormat.Float4;
+		if ( type === 'float' ) return GPUVertexFormat.Float32;
+		if ( type === 'vec2' ) return GPUVertexFormat.Float32x2;
+		if ( type === 'vec3' ) return GPUVertexFormat.Float32x3;
+		if ( type === 'vec4' ) return GPUVertexFormat.Float32x4;
 
-		if ( type === 'int' ) return GPUVertexFormat.Int;
-		if ( type === 'ivec2' ) return GPUVertexFormat.Int2;
-		if ( type === 'ivec3' ) return GPUVertexFormat.Int3;
-		if ( type === 'ivec4' ) return GPUVertexFormat.Int4;
+		if ( type === 'int' ) return GPUVertexFormat.Sint32;
+		if ( type === 'ivec2' ) return GPUVertexFormat.Sint32x2;
+		if ( type === 'ivec3' ) return GPUVertexFormat.Sint32x3;
+		if ( type === 'ivec4' ) return GPUVertexFormat.Sint32x4;
 
-		if ( type === 'uint' ) return GPUVertexFormat.UInt;
-		if ( type === 'uvec2' ) return GPUVertexFormat.UInt2;
-		if ( type === 'uvec3' ) return GPUVertexFormat.UInt3;
-		if ( type === 'uvec4' ) return GPUVertexFormat.UInt4;
+		if ( type === 'uint' ) return GPUVertexFormat.Uint32;
+		if ( type === 'uvec2' ) return GPUVertexFormat.Uint32x2;
+		if ( type === 'uvec3' ) return GPUVertexFormat.Uint32x3;
+		if ( type === 'uvec4' ) return GPUVertexFormat.Uint32x4;
 
 		console.error( 'THREE.WebGPURenderer: Shader variable type not supported yet.', type );
 
@@ -760,7 +757,7 @@ class WebGPURenderPipelines {
 
 		// find "layout (location = num) in type name" in vertex shader
 
-		const regex = /^\s*layout\s*\(\s*location\s*=\s*(?<location>[0-9]+)\s*\)\s*in\s+(?<type>\w+)\s+(?<name>\w+)\s*;/gmi;
+		const regex = /\s*layout\s*\(\s*location\s*=\s*(?<location>[0-9]+)\s*\)\s*in\s+(?<type>\w+)\s+(?<name>\w+)\s*;/gmi;
 		let shaderAttribute = null;
 
 		const attributes = [];
@@ -789,6 +786,21 @@ class WebGPURenderPipelines {
 		} );
 
 	}
+
+}
+
+function onMaterialDispose( event ) {
+
+	const properties = this.properties;
+
+	const material = event.target;
+	const materialProperties = properties.get( material );
+
+	material.removeEventListener( 'dispose', materialProperties.disposeCallback );
+
+	properties.remove( material );
+
+	// @TODO: still needed remove nodes, bindings and pipeline
 
 }
 

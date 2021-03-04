@@ -7,7 +7,7 @@ import { SetSceneCommand } from './commands/SetSceneCommand.js';
 
 import { LoaderUtils } from './LoaderUtils.js';
 
-import { JSZip } from '../../examples/jsm/libs/jszip.module.min.js';
+import { unzipSync, strFromU8 } from '../../examples/jsm/libs/fflate.module.min.js';
 
 function Loader( editor ) {
 
@@ -424,9 +424,6 @@ function Loader( editor ) {
 					var { PLYLoader } = await import( '../../examples/jsm/loaders/PLYLoader.js' );
 
 					var geometry = new PLYLoader().parse( contents );
-					geometry.sourceType = 'ply';
-					geometry.sourceFile = file.name;
-
 					var material = new THREE.MeshStandardMaterial();
 
 					var mesh = new THREE.Mesh( geometry, material );
@@ -448,9 +445,6 @@ function Loader( editor ) {
 					var { STLLoader } = await import( '../../examples/jsm/loaders/STLLoader.js' );
 
 					var geometry = new STLLoader().parse( contents );
-					geometry.sourceType = 'stl';
-					geometry.sourceFile = file.name;
-
 					var material = new THREE.MeshStandardMaterial();
 
 					var mesh = new THREE.Mesh( geometry, material );
@@ -504,7 +498,7 @@ function Loader( editor ) {
 
 							var shape = shapes[ j ];
 
-							var geometry = new THREE.ShapeBufferGeometry( shape );
+							var geometry = new THREE.ShapeGeometry( shape );
 							var mesh = new THREE.Mesh( geometry, material );
 
 							group.add( mesh );
@@ -520,6 +514,35 @@ function Loader( editor ) {
 
 				break;
 
+			case 'vox':
+
+				reader.addEventListener( 'load', async function ( event ) {
+
+					var contents = event.target.result;
+
+					var { VOXLoader, VOXMesh } = await import( '../../examples/jsm/loaders/VOXLoader.js' );
+
+					var chunks = new VOXLoader().parse( contents );
+
+					var group = new THREE.Group();
+					group.name = filename;
+
+					for ( let i = 0; i < chunks.length; i ++ ) {
+
+						const chunk = chunks[ i ];
+
+						const mesh = new VOXMesh( chunk );
+						group.add( mesh );
+
+					}
+
+					editor.execute( new AddObjectCommand( editor, group ) );
+
+				}, false );
+				reader.readAsArrayBuffer( file );
+
+				break;
+
 			case 'vtk':
 
 				reader.addEventListener( 'load', async function ( event ) {
@@ -529,9 +552,6 @@ function Loader( editor ) {
 					var { VTKLoader } = await import( '../../examples/jsm/loaders/VTKLoader.js' );
 
 					var geometry = new VTKLoader().parse( contents );
-					geometry.sourceType = 'vtk';
-					geometry.sourceFile = file.name;
-
 					var material = new THREE.MeshStandardMaterial();
 
 					var mesh = new THREE.Mesh( geometry, material );
@@ -572,8 +592,7 @@ function Loader( editor ) {
 					var geometry = new XYZLoader().parse( contents );
 
 					var material = new THREE.PointsMaterial();
-
-					if ( geometry.hasAttribute( 'color' ) === true ) material.vertexColors = true;
+					material.vertexColors = geometry.hasAttribute( 'color' );
 
 					var points = new THREE.Points( geometry, material );
 					points.name = filename;
@@ -592,7 +611,7 @@ function Loader( editor ) {
 					handleZIP( event.target.result );
 
 				}, false );
-				reader.readAsBinaryString( file );
+				reader.readAsArrayBuffer( file );
 
 				break;
 
@@ -678,35 +697,37 @@ function Loader( editor ) {
 
 	async function handleZIP( contents ) {
 
-		var zip = new JSZip( contents );
+		var zip = unzipSync( new Uint8Array( contents ) );
 
 		// Poly
 
-		if ( zip.files[ 'model.obj' ] && zip.files[ 'materials.mtl' ] ) {
+		if ( zip[ 'model.obj' ] && zip[ 'materials.mtl' ] ) {
 
 			var { MTLLoader } = await import( '../../examples/jsm/loaders/MTLLoader.js' );
 			var { OBJLoader } = await import( '../../examples/jsm/loaders/OBJLoader.js' );
 
-			var materials = new MTLLoader().parse( zip.file( 'materials.mtl' ).asText() );
-			var object = new OBJLoader().setMaterials( materials ).parse( zip.file( 'model.obj' ).asText() );
+			var materials = new MTLLoader().parse( strFromU8( zip[ 'materials.mtl' ] ) );
+			var object = new OBJLoader().setMaterials( materials ).parse( strFromU8( zip[ 'model.obj' ] ) );
 			editor.execute( new AddObjectCommand( editor, object ) );
 
 		}
 
 		//
 
-		zip.filter( async function ( path, file ) {
+		for ( var path in zip ) {
+
+			var file = zip[ path ];
 
 			var manager = new THREE.LoadingManager();
 			manager.setURLModifier( function ( url ) {
 
-				var file = zip.files[ url ];
+				var file = zip[ url ];
 
 				if ( file ) {
 
 					console.log( 'Loading', url );
 
-					var blob = new Blob( [ file.asArrayBuffer() ], { type: 'application/octet-stream' } );
+					var blob = new Blob( [ file.buffer ], { type: 'application/octet-stream' } );
 					return URL.createObjectURL( blob );
 
 				}
@@ -715,7 +736,7 @@ function Loader( editor ) {
 
 			} );
 
-			var extension = file.name.split( '.' ).pop().toLowerCase();
+			var extension = path.split( '.' ).pop().toLowerCase();
 
 			switch ( extension ) {
 
@@ -724,7 +745,7 @@ function Loader( editor ) {
 					var { FBXLoader } = await import( '../../examples/jsm/loaders/FBXLoader.js' );
 
 					var loader = new FBXLoader( manager );
-					var object = loader.parse( file.asArrayBuffer() );
+					var object = loader.parse( file.buffer );
 
 					editor.execute( new AddObjectCommand( editor, object ) );
 
@@ -741,7 +762,7 @@ function Loader( editor ) {
 					var loader = new GLTFLoader();
 					loader.setDRACOLoader( dracoLoader );
 
-					loader.parse( file.asArrayBuffer(), '', function ( result ) {
+					loader.parse( file.buffer, '', function ( result ) {
 
 						var scene = result.scene;
 
@@ -762,7 +783,7 @@ function Loader( editor ) {
 
 					var loader = new GLTFLoader( manager );
 					loader.setDRACOLoader( dracoLoader );
-					loader.parse( file.asText(), '', function ( result ) {
+					loader.parse( strFromU8( file ), '', function ( result ) {
 
 						var scene = result.scene;
 
@@ -775,7 +796,7 @@ function Loader( editor ) {
 
 			}
 
-		} );
+		}
 
 	}
 
