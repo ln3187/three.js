@@ -12,60 +12,38 @@
 	<h1>[name]</h1>
 
 	<p>
-		3D models are available in hundreds of file formats, each with different
-		purposes, assorted features, and varying complexity. Although
-		<a href="https://github.com/mrdoob/three.js/tree/dev/examples/jsm/loaders" target="_blank" rel="noopener">
-			three.js provides many loaders</a>, choosing the right format and
-		workflow will save time and frustration later on. Some formats are
-		difficult to work with, inefficient for realtime experiences, or simply not
-		fully supported at this time.
-
 		3Dモデルはたくさんのファイル形式で利用可能で、それぞれに目的があり、複雑さも様々です。
-		three.jsは様々なloaderを提供していますが、適切な形式とワークフローを選択することで、パフォーマンスを改善することができます。うまく動作させるのが難しいフォーマットや、リアルタイムでの体験に適さないフォーマットもあり、中にはまったくサポートされていないフォーマットもあります。
+		<a href="https://github.com/mrdoob/three.js/tree/dev/examples/jsm/loaders" target="_blank" rel="noopener">
+			three.jsは様々なloaderを提供しています</a>
+		が、適切な形式とワークフローを選択することで、パフォーマンスを改善することができます。
+		うまく動作させるのが難しいフォーマットや、リアルタイムでの体験に適さないフォーマットもあり、
+		中にはまったくサポートされていないフォーマットもあります。
 	</p>
 
 	<p>
-		This guide provides a workflow recommended for most users, and suggestions
-		for what to try if things don't go as expected.
-
 		このガイドでは、ほとんどのユーザにおすすめのワークフローと、予期しないことが発生したときに何を試してみればよいかを紹介します。
 	</p>
 
-	<h2>Before we start</h2>
+	<h2>始める前に</h2>
 
 	<p>
-		If you're new to running a local server, begin with
-		[link:#manual/introduction/How-to-run-things-locally how to run things locally]
-		first. Many common errors viewing 3D models can be avoided by hosting files
-		correctly.
-
-		もしthree.jsをローカルサーバで動かすのが初めてなら、how to run things locallyを見てみてください。
+		もしthree.jsをローカルサーバで動かすのが初めてなら、
+		[link:#manual/introduction/How-to-run-things-locally how to run things locally]を見てみてください。
 		3Dモデルを表示する際の多くの一般的なエラーはファイルを正しく配置することで防ぐことができます。
 	</p>
 
-	<h2>Recommended workflow</h2>
+	<h2>おすすめのワークフロー</h2>
 
 	<p>
-		Where possible, we recommend using glTF (GL Transmission Format). Both
-		<small>.GLB</small> and <small>.GLTF</small> versions of the format are
-		well supported. Because glTF is focused on runtime asset delivery, it is
-		compact to transmit and fast to load. Features include meshes, materials,
-		textures, skins, skeletons, morph targets, animations, lights, and
-		cameras.
-
-		おすすめのワークフロー
-		可能なら、glTF(GL Transmission
-		Format)を使うことをおすすめします。glTFはGLBとGLTFの両方のフォーマットについてサポートしています。glTFはランタイムアセットの配信に注力しているので、変換時にはコンパクトでロードも早いです。機能としては、メッシュやマテリアル、テクスチャ、スキン、スケルトン、morphターゲット、アニメーション、ライト、カメラがあります。
+		可能なら、glTF(GL Transmission Format)を使うことをおすすめします。
+		glTFは<small>.GLB</small> と <small>.GLTF</small>の両方のフォーマットについてサポートしています。
+		glTFはランタイムアセットの配信に注力しているので、変換時にはコンパクトでロードも早いです。
+		機能としては、メッシュやマテリアル、テクスチャ、スキン、スケルトン、morphターゲット、アニメーション、ライト、カメラがあります。
 	</p>
 
 	<p>
-		Public-domain glTF files are available on sites like
-		<a href="https://sketchfab.com/models?features=downloadable&sort_by=-likeCount&type=models" target="_blank"
-			rel="noopener">
-			Sketchfab</a>, or various tools include glTF export:
-
-		公開されているglTFファイルはSketchfabのようなサイトで利用可能です。
-		また様残なツールでglTF形式でexportすることが出来ます。
+		公開されているglTFファイルは<a href="https://sketchfab.com/models?features=downloadable&sort_by=-likeCount&type=models" target="_blank" rel="noopener">Sketchfab</a>のようなサイトで利用可能です。
+		また様々なツールでglTF形式でexportすることが出来ます。
 	</p>
 
 	<ul>
@@ -87,18 +65,12 @@
 	</ul>
 
 	<p>
-		If your preferred tools do not support glTF, consider requesting glTF
-		export from the authors, or posting on
+		glTFをサポートしていないツールが使いたい場合は、ツールの作者にglTFのエクスポートを依頼するか、
 		<a href="https://github.com/KhronosGroup/glTF/issues/1051" target="_blank" rel="noopener">the glTF roadmap
-			thread</a>.
-
-		glTFをサポートしていないツールが使いたい場合は、ツールの作者にglTFのエクスポートを依頼するか、glTFロードマップスレッドに投稿することを検討してください。
+			thread</a>に投稿することを検討してください。
 	</p>
 
 	<p>
-		When glTF is not an option, popular formats such as FBX, OBJ, or COLLADA
-		are also available and regularly maintained.
-
 		glTFが選択肢にない場合は、FBX,OBJ,COLLADAといった一般的な形式も利用可能です。
 		これらは定期的にメンテナンスされています。
 	</p>
@@ -106,10 +78,7 @@
 	<h2>Loading</h2>
 
 	<p>
-		Only a few loaders (e.g. [page:ObjectLoader]) are included by default with
-		three.js — others should be added to your app individually.
-
-		ごく一部のローダ(例えば、ObjectLoader)はデフォルトでthree.jsに入っています。
+		ごく一部のローダ(例えば、[page:ObjectLoader])はデフォルトでthree.jsに入っています。
 		ほかのものは、ユーザがそれぞれ自分のアプリに加える必要があります。
 
 	</p>
@@ -119,10 +88,6 @@
 	</code>
 
 	<p>
-		Once you've imported a loader, you're ready to add a model to your scene. Syntax varies among
-		different loaders — when using another format, check the examples and documentation for that
-		loader. For glTF, usage with global scripts would be:
-
 		ローダをimportした時点で、シーンにモデルを追加できるようになります。
 		文法はローダによって異なります。異なるフォーマットを使う場合は、そのローダのドキュメントやサンプルを確認してください。glTFの場合、グローバルスクリプトでは以下のように使用します。
 	</p>
@@ -142,84 +107,48 @@
 	</code>
 
 	<p>
-		See [page:GLTFLoader GLTFLoader documentation] for further details.
+		より詳細な機能について知りたい場合は[page:GLTFLoader GLTFLoader documentation]を見てください。
 	</p>
 
 	<h2>Troubleshooting</h2>
 
 	<p>
-		You've spent hours modeling an artisanal masterpiece, you load it into
-		the webpage, and — oh no! 😭 It's distorted, miscolored, or missing entirely.
-		Start with these troubleshooting steps:
-
-		何時間もかけて傑作をモデリングしたのに、webpageに読み込むと、なんと！
+		何時間もかけて傑作をモデリングしたのに、webpageに読み込むと、なんと！😭
 		歪んでいたり、色がおかしかったり、表示されなかったりすることがあります。
 		そういったときにはトラブルシューティングを始めましょう。
 	</p>
 
 	<ol>
 		<li>
-			Check the JavaScript console for errors, and make sure you've used an
-			<em>onError</em> callback when calling <em>.load()</em> to log the result.
-
-			JavaScriptコンソールでエラーが発生していないか確認し、.load() を呼び出す際にonErrorコールバックを使用して結果をログに記録していることを確認してください
+			JavaScriptコンソールでエラーが発生していないか確認し、<em>.load()</em> を呼び出す際に<em>onError</em>コールバックを使用して結果をログに記録していることを確認してください
 
 		</li>
 		<li>
-			View the model in another application. For glTF, drag-and-drop viewers
-			are available for
-			<a href="https://gltf-viewer.donmccurdy.com/" target="_blank" rel="noopener">three.js</a> and
-			<a href="http://sandbox.babylonjs.com/" target="_blank" rel="noopener">babylon.js</a>. If the model
-			appears correctly in one or more applications,
-			<a href="https://github.com/mrdoob/three.js/issues/new" target="_blank" rel="noopener">file a bug against
-				three.js</a>.
-			If the model cannot be shown in any application, we strongly encourage
-			filing a bug with the application used to create the model.
-
 			モデルを別のアプリケーションで見てみてください。
-			glTFではthree.jsとbabylon.jsでドラックアンドドロップでviewerが利用できます。
-			一つ以上のアプリケーションでモデルが正しく表示された場合、three.jsにバグを報告してください。
+			glTFでは<a href="https://gltf-viewer.donmccurdy.com/" target="_blank" rel="noopener">three.js</a> と
+			<a href="http://sandbox.babylonjs.com/" target="_blank" rel="noopener">babylon.js</a>でドラックアンドドロップでviewerが利用できます。
+			一つ以上のアプリケーションでモデルが正しく表示された場合、<a href="https://github.com/mrdoob/three.js/issues/new" target="_blank" rel="noopener">three.jsにバグを報告</a>してください。
 			モデルがどのアプリケーションでも表示できない場合、モデルを作成する際に使ったアプリにバグを報告することを強くお勧めします。
 		</li>
 		<li>
-			Try scaling the model up or down by a factor of 1000. Many models are
-			scaled differently, and large models may not appear if the camera is
-			inside the model.
-
 			モデルを1000倍にスケールアップしたり、スケールダウンしたりしてみてください。
 			多くのモデルはスケールが異なります。大きなモデルだと、カメラがモデルの中に入ってしまって見えなくなっていることがあります。
 		</li>
 		<li>
-			Try to add and position a light source. The model may be hidden in the dark.
-
 			光源を追加して配置してみてください。暗闇の中にモデルが隠れている可能性があります。
 		</li>
 		<li>
-			Look for failed texture requests in the network tab, like
-			<em>C:\\Path\To\Model\texture.jpg</em>. Use paths relative to your
-			model instead, such as <em>images/texture.jpg</em> — this may require
-			editing the model file in a text editor.
-
-			ネットワークタブで失敗しているテクスチャのリクエスト(例えば、C:\\Path\To\Model\texture.jpg)を探してみてください。見つかったら代わりに images/texture.jpg
+			ネットワークタブで失敗しているテクスチャのリクエスト(例えば、<em>C:\\Path\To\Model\texture.jpg</em>)を探してみてください。見つかったら代わりに <em>images/texture.jpg</em>
 			のようなモデルへの相対パスを使ってください。
 			これはテキストエディタでモデルファイルを編集する必要があるかもしれません。
 		</li>
 	</ol>
 
-	<h2>Asking for help</h2>
+	<h2>助けを求める(Asking for help)</h2>
 
 	<p>
-		If you've gone through the troubleshooting process above and your model
-		still isn't working, the right approach to asking for help will get you to
-		a solution faster. Post a question on the
-		<a href="https://discourse.threejs.org/" target="_blank" rel="noopener">three.js forum</a> and, whenever
-		possible,
-		include your model (or a simpler model with the same problem) in any formats
-		you have available. Include enough information for someone else to reproduce
-		the issue quickly — ideally, a live demo.
-
 		上記のトラブルシューティングのプロセスを一通りやってもまだ動かない場合、正しいやり方で助けを求めることが
-		早期の解決につながります。three.jsのフォーラムに質問を投稿して、可能であれば自分のモデル(もしくは同じ問題を持つよりシンプルなモデル)を利用可能な形式で添付してください。他の人が問題を迅速に再現できるように、十分な情報を含めてください。
+		早期の解決につながります。<a href="https://discourse.threejs.org/" target="_blank" rel="noopener">three.js forum</a>に質問を投稿して、可能であれば自分のモデル(もしくは同じ問題を持つよりシンプルなモデル)を利用可能な形式で添付してください。他の人が問題を迅速に再現できるように、十分な情報を含めてください。
 	</p>
 
 </body>

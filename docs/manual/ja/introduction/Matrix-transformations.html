@@ -25,7 +25,7 @@
 	</p>
 	<ol>
 		<li>
-			オブジェクトの*位置*や*4元数*や*スケールのプロパティ*を変更することで、three.jsに
+			オブジェクトの*position*や*quaternion*(四元数)や<strong>スケールのプロパティ</strong>を変更することで、three.jsに
 			オブジェクトの行列を再計算させます。
 			<code>
 object.position.copy( start_position );
@@ -52,25 +52,23 @@ object.matrixAutoUpdate = false;
 				</code>
 			この場合 *matrixAutoUpdate*は*false*に設定<em>しなくてはならない</em>ことに注意してください。
 			また*updateMatrix*を呼ば<em>ない</em>ようにしてください。
-			*updateMatrix*を呼ぶと、行列にマニュアルで加えた変更がなくなり、*位置やスケール*などから行列が再計算されます。
+			*updateMatrix*を呼ぶと、行列にマニュアルで加えた変更がなくなり、<strong>位置やスケール</strong>などから行列が再計算されます。
 		</li>
 	</ol>
 
 	<h2>Object and world matrices(オブジェクトとワールド座標系での行列)</h2>
 	<p>
-		オブジェクトの行列([page:Object3D.matrix matrix])は、[page:Object3D.parent 親オブジェクト]に対する<em>相対的な</em>変換を保持しています。
+		オブジェクトの行列([page:Object3D.matrix matrix])は、[page:Object3D.parent parent](親オブジェクト)に対する<em>相対的な</em>変換を保持しています。
 		<em>ワールド座標系での</em>オブジェクトの変換を取得するには、オブジェクトの[page:Object3D.matrixWorld]にアクセスする必要があります。
 
 	</p>
 	<p>
-		親オブジェクトや子オブジェクトの変換が変更された場合は、[page:Object3D.updateMatrixWorld
-		updateMatrixWorld()]を呼び出すことで、子オブジェクトの[page:Object3D.matrixWorld matrixWorld]の更新を要求することができます。
+		親オブジェクトや子オブジェクトの変換が変更された場合は、[page:Object3D.updateMatrixWorld updateMatrixWorld]()を呼び出すことで、子オブジェクトの[page:Object3D.matrixWorld matrixWorld]の更新を要求することができます。
 	</p>
 
 	<h2>Rotation and Quaternion(回転と四元数)</h2>
 	<p>
-		three.jsでは3次元の回線を表すためにオイラー角([page:Euler Euler angles])と4元数([page:Quaternion
-		Quaternions])という2つの方法があります。
+		three.jsでは3次元の回線を表すためにオイラー角([page:Euler Euler angles])と4元数([page:Quaternion Quaternions])という2つの方法があります。
 		また、three.jsではこの2つの間の変換メソッドも提供されています。
 		オイラー角はgimbal lockと呼ばれる問題の影響をうけることがあります。
 		gimbal lockが発生すると、特定の設定のときにオブジェクトの回転の自由度が失われます(オブジェクトが特定の軸方向に回転できなくなります)

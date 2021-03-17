@@ -14,7 +14,7 @@
 	<p>
 		アプリケーションのパフォーマンスを向上させ、メモリリークを回避するための重要なこととして、
 		未使用のライブラリエンティティの廃棄が挙げられます。
-		three.js型のインスタンスを作成すると、決また量ののメモリが割り当てられます。
+		three.js型のインスタンスを作成すると、決まった量のメモリが割り当てられます。
 		しかし、*three.js*はジオメトリやマテリアルのような特定のオブジェクトのために、レンダリングに必要なバッファやshaderといったWebGL関連のエンティティを作成します。これらのオブジェクトは自動的に解放されるわけではありません。
 		その代わり、アプリケーションはこのようなリソースを解放するために特別なAPIを使用する必要があります。
 		このガイドでは、このAPIがどのように使用されるのか、また、このコンテキストではどのようなオブジェクトが関連しているのかについて簡単に説明します。
@@ -24,8 +24,7 @@
 
 	<p>
 		ジオメトリは普通は、属性の集合として定義された頂点の情報を表します。
-		*three.js*は、内部にはそれぞれの属性に対して、[link:https://developer.mozilla.org/en-US/docs/Web/API/WebGLBuffer
-		WebGLBuffer]型のオブジェクトを作成します。
+		*three.js*は、内部にはそれぞれの属性に対して、[link:https://developer.mozilla.org/en-US/docs/Web/API/WebGLBuffer WebGLBuffer]型のオブジェクトを作成します。
 		これらのentityは[page:BufferGeometry.dispose]()が呼ばれた時にのみ削除されます。
 		もしアプリケーションの中で、あるジオメトリが使われなくなった場合は、関連したリソースを開放するためにこの方法を実行してください。
 	</p>
@@ -47,8 +46,7 @@
 		マテリアルの廃棄をしても、テクスチャには影響がありません。
 		一つのテクスチャが複数のマテリアルに同時に使用されることがあるので、
 		テクスチャとマテリアルは別々に制御されています。
-		テクスチャのインスタンスを作成すると、three.jsは内部に[link:https://developer.mozilla.org/en-US/docs/Web/API/WebGLTexture
-		WebGLTexture]を作成します。
+		テクスチャのインスタンスを作成すると、three.jsは内部に[link:https://developer.mozilla.org/en-US/docs/Web/API/WebGLTexture WebGLTexture]を作成します。
 		バッファと同様に、このオブジェクトは[page:Texture.dispose]()を呼ぶことでしか削除できません。
 	</p>
 
@@ -56,9 +54,7 @@
 
 	<p>
 		[page:WebGLRenderTarget]型のオブジェクトは、描画先をカスタム出来るように、
-		[link:https://developer.mozilla.org/en-US/docs/Web/API/WebGLTexture
-		WebGLTexture]インスタンスだけでなく、[link:https://developer.mozilla.org/en-US/docs/Web/API/WebGLFramebuffer
-		WebGLFramebuffer]と
+		[link:https://developer.mozilla.org/en-US/docs/Web/API/WebGLTexture WebGLTexture]インスタンスだけでなく、[link:https://developer.mozilla.org/en-US/docs/Web/API/WebGLFramebuffer WebGLFramebuffer]と
 		[link:https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderbuffer WebGLRenderbuffer]も確保します。
 		これらのオブジェクトは[page:WebGLRenderTarget.dispose]()を実行することで、解放されます。
 	</p>

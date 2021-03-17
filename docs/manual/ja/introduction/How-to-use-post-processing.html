@@ -13,7 +13,7 @@
 
 	<p>
 		three.jsアプリケーションの多くは3Dオブジェクトをスクリーンに直接描画します。
-		しかしながら時々、一つ以上のエフェクト(被写界深度,Bloom、フィルムグレイン、様々なアンチエイリアス効果など)を適用したい場合があります。こういったエフェクトを実装するためにpost-processingは広く使用されています。
+		しかしながら時々、一つ以上のエフェクト(被写界深度、Bloom、フィルムグレイン、様々なアンチエイリアス効果など)を適用したい場合があります。こういったエフェクトを実装するためにpost-processingは広く使用されています。
 		まず、シーンはビデオカードメモリのバッファを表す描画対象に対して描画されます。
 		次に、最終的なスクリーンへのレンダリングの前に、1つ以上のpost-processingで画像バッファにフィルタとエフェクトを適用します。
 	</p>
@@ -25,7 +25,7 @@
 
 	<p>
 		プロセスの一段階目はexampleディレクトリから必要なファイルを全てimportすることです。
-		このガイドではthree.jsの[link:https://www.npmjs.com/package/three npmの公式のパッケージ]を使っていると想定しています。
+		このガイドではthree.jsの[link:https://www.npmjs.com/package/three npm package](npmの公式のパッケージ)を使っていると想定しています。
 		このガイドのデモでは下に示したファイルが必要です。
 	</p>
 
@@ -78,15 +78,14 @@
 		*RenderPass*は普通チェインのはじめにあります。
 		これはレンダリングされたシーンを次のpost-processingの入力とするためです。
 		*GlitchPass*は、これらのイメージをワイルドなglitch effectを適用するために使います。
-		実際に動いているものを見るために、[link:https://threejs.org/examples/webgl_postprocessing_glitch このサンプル]を見てみましょう。
+		実際に動いているものを見るために、[link:https://threejs.org/examples/webgl_postprocessing_glitch sample]を見てみましょう。
 	</p>
 
 	<h2>Built-in Passes(組み込みのpass)</h2>
 
 	<p>
 		エンジンに元から入っている定義済みの後処理passが使えます。
-		このpassは[link:https://github.com/mrdoob/three.js/tree/dev/examples/jsm/postprocessing
-		postprocessing]ディレクトリに入っていて、広範囲に使用できます。
+		このpassは[link:https://github.com/mrdoob/three.js/tree/dev/examples/jsm/postprocessing postprocessing]ディレクトリに入っていて、広範囲に使用できます。
 	</p>
 
 	<h2>Custom Passes(カスタムpass)</h2>
